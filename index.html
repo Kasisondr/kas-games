@@ -1,1 +1,299 @@
-404: Not Found
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML Games Hub</title>
+<style>
+body { margin:0; font-family:sans-serif; background:#121212; color:#f0f0f0; }
+button { cursor:pointer; transition:0.2s; }
+h1,h2 { margin-bottom:10px; }
+#theme-toggle { position:fixed; top:10px; right:10px; padding:10px; background:#282828; border:none; border-radius:5px; color:white; }
+#welcome-screen { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; }
+.welcome-buttons { display:flex; flex-wrap:wrap; gap:15px; margin-top:20px; }
+.welcome-buttons button { padding:15px 25px; border:none; border-radius:10px; background:#282828; color:white; font-size:1.2em; }
+.section { display:none; padding:20px; }
+.section.active { display:block; }
+#search-bar { width:100%; max-width:500px; padding:10px 15px; margin-bottom:20px; border-radius:10px; border:none; font-size:1em; }
+.button-container { display:flex; flex-wrap:wrap; gap:10px; }
+.game-card, .apps-card { width:150px; background:#1f1f1f; padding:10px; border-radius:10px; display:flex; flex-direction:column; align-items:center; text-align:center; }
+.game-card img, .apps-card img { width:80px; height:80px; object-fit:contain; margin-bottom:10px; }
+.game-card button, .apps-card button { margin-top:auto; padding:5px 10px; border:none; border-radius:5px; background:#282828; color:white; width:100%; }
+#game-window { display:none; flex-direction:column; align-items:center; justify-content:center; padding:10px; background:#1f1f1f; border-radius:10px; margin:20px; width:calc(100% - 40px); }
+#game-window iframe { width:100%; height:600px; border:none; border-radius:10px; }
+#game-controls { display:flex; justify-content:space-between; width:100%; max-width:900px; margin-top:10px; }
+#game-controls button { padding:5px 10px; border:none; border-radius:5px; background:#282828; color:white; }
+</style>
+</head>
+<body>
+
+<button id="theme-toggle">🌙</button>
+
+<div id="welcome-screen">
+    <h1>Welcome to HTML Games Hub</h1>
+    <div id="players-online">Players Online: <span id="online-count">0</span></div>
+    <div class="welcome-buttons">
+        <button onclick="showSection('games')">Games</button>
+        <button onclick="showSection('apps')">Apps</button>
+        <button onclick="showSection('flash')">Flash Games</button>
+        <button onclick="showSection('unblockers')">Unblockers</button>
+    </div>
+</div>
+
+<input type="text" id="search-bar" placeholder="Search..." oninput="filterItems()">
+
+<!-- Sections -->
+<div id="games" class="section">
+    <h2>Games</h2>
+    <div class="button-container" id="games-container"></div>
+</div>
+
+<div id="apps" class="section">
+    <h2>Unblocked Apps</h2>
+    <div class="button-container" id="apps-container"></div>
+</div>
+
+<div id="flash" class="section">
+    <h2>Flash Games</h2>
+    <div class="button-container" id="flash-container"></div>
+</div>
+
+<div id="unblockers" class="section">
+    <h2>Unblockers</h2>
+    <div class="button-container" id="unblockers-container"></div>
+</div>
+
+<!-- Game Window -->
+<div id="game-window">
+    <h2 id="game-title"></h2>
+    <iframe id="game-frame" src=""></iframe>
+    <div id="game-controls">
+        <button onclick="likeGame()">👍 Like</button>
+        <button onclick="dislikeGame()">👎 Dislike</button>
+        <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
+        <button onclick="closeGame()">❌ Close</button>
+    </div>
+</div>
+
+<script>
+// Theme toggle
+document.getElementById('theme-toggle').onclick = () => {
+    document.body.style.background = document.body.style.background==='white'?'#121212':'white';
+    document.body.style.color = document.body.style.color==='#121212'?'#f0f0f0':'#121212';
+};
+
+// Container div where buttons will appear
+const container = document.getElementById('games-container'); // make sure you have <div id="games-container"></div> in your HTML
+
+// List of all games
+const games = [
+  { name: '1V1.LOL', url: 'https://html-games-v2-ten.vercel.app/1v1lol/fixed/game.html' },
+  { name: '1V1space', url: 'https://html-games-v2-ten.vercel.app/1v1space/index.html' },
+  { name: '2048', url: 'https://html-games-v2-ten.vercel.app/2048/index.html' },
+  { name: 'Among Us', url: 'https://html-games-v2-ten.vercel.app/among-us/index.html' },
+  { name: 'Alien Invaders.io', url: 'https://html-games-v2-ten.vercel.app/alien-invaders-io/index.html' },
+  { name: 'Angry Birds', url: 'https://html-games-v2-ten.vercel.app/angry-birds/index.html' },
+  { name: 'Anti Terrorist Rush', url: 'https://html-games-v2-ten.vercel.app/anti-terrorist-rush/index.html' },
+  { name: 'Arcade Wizard', url: 'https://html-games-v2-ten.vercel.app/arcade-wizard/index.html' },
+  { name: 'Asciispace', url: 'https://html-games-v2-ten.vercel.app/asciispace/index.html' },
+  { name: 'Asteroids', url: 'https://html-games-v2-ten.vercel.app/asteroids/index.html' },
+  { name: 'Astray', url: 'https://html-games-v2-ten.vercel.app/astray/index.html' },
+  { name: 'Awesome Tanks 2', url: 'https://html-games-v2-ten.vercel.app/awesome-tanks-2/index.html' },
+  { name: 'Backcountry', url: 'https://html-games-v2-ten.vercel.app/backcountry/index.html' },
+  { name: 'Backflip Dive 3D', url: 'https://html-games-v2-ten.vercel.app/backflip-dive-3d/index.html' },
+  { name: 'Backrooms', url: 'https://html-games-v2-ten.vercel.app/backrooms/index.html' },
+  { name: 'Bad Ice Cream', url: 'https://html-games-v2-ten.vercel.app/bad-ice-cream/index.html' },
+  { name: 'Bad Ice Cream 2', url: 'https://html-games-v2-ten.vercel.app/bad-ice-cream-2/index.html' },
+  { name: 'Bad Ice Cream 3', url: 'https://html-games-v2-ten.vercel.app/bad-ice-cream-3/index.html' },
+  { name: 'Baldis Basics', url: 'https://html-games-v2-ten.vercel.app/baldis-basics/index.html' },
+  { name: 'BasketBros.io', url: 'https://html-games-v2-ten.vercel.app/basket-bros-io/index.html' },
+  { name: 'Basketball Legends 2020', url: 'https://html-games-v2-ten.vercel.app/basketball-legends-2020/index.html' },
+  { name: 'Basketball Stars', url: 'https://html-games-v2-ten.vercel.app/basketball-stars/index.html' },
+  { name: 'Basketball.io', url: 'https://html-games-v2-ten.vercel.app/basketball-io/index.html' },
+  { name: 'Battle For Gondor', url: 'https://html-games-v2-ten.vercel.app/battleforgondor/index.html' },
+  { name: 'Bigred Button', url: 'https://html-games-v2-ten.vercel.app/bigredbutton/index.html' },
+  { name: 'Binding of isaac', url: 'https://html-games-v2-ten.vercel.app/binding-of-isaac/index.html' },
+  { name: 'Black hole Square', url: 'https://html-games-v2-ten.vercel.app/blackholesquare/index.html' },
+  { name: 'Black Knight', url: 'https://html-games-v2-ten.vercel.app/blackknight/index.html' },
+  { name: 'Blocky Snakes', url: 'https://html-games-v2-ten.vercel.app/blocky-snakes/index.html' },
+  { name: 'BloonsTD', url: 'https://html-games-v2-ten.vercel.app/bloonstd/index.html' },
+  { name: 'Breakout', url: 'https://html-games-v2-ten.vercel.app/breakout/index.html' },
+  { name: 'Burning Man 2', url: 'https://html-games-v2-ten.vercel.app/burning-man-2/index.html' },
+  { name: 'Canyon Defence', url: 'https://html-games-v2-ten.vercel.app/canyondefense/index.html' },
+  { name: 'Car simulator', url: 'https://html-games-v2-ten.vercel.app/cars-simulator/index.html' },
+  { name: 'Champion archer', url: 'https://html-games-v2-ten.vercel.app/championarcher/index.html' },
+  { name: 'Chess', url: 'https://html-games-v2-ten.vercel.app/chess/index.html' },
+  { name: 'Chrome Dino', url: 'https://html-games-v2-ten.vercel.app/chrome-dino/index.html' },
+  { name: 'Cookie Clicker', url: 'https://html-games-v2-ten.vercel.app/cookie-clicker/index.html' },
+  { name: 'CSGO Clicker', url: 'https://html-games-v2-ten.vercel.app/csgo-clicker/index.html' },
+  { name: 'Crossyroad', url: 'https://html-games-v2-ten.vercel.app/crossyroad/index.html' },
+  { name: 'Cut the Rope', url: 'https://html-games-v2-ten.vercel.app/cuttherope/index.html' },
+  { name: 'Doge Mining Simulator', url: 'https://html-games-v2-ten.vercel.app/doge-mining-simulator/index.html' },
+  { name: 'Doodle Jump', url: 'https://html-games-v2-ten.vercel.app/doodle-jump/index.html' },
+  { name: 'Ducklife', url: 'https://html-games-v2-ten.vercel.app/ducklife/index.html' },
+  { name: 'Edge Surf', url: 'https://html-games-v2-ten.vercel.app/edge-surf/index.html' },
+  { name: 'Emulator JS', url: 'https://html-games-v2-ten.vercel.app/emulator-js/index.html' },
+  { name: 'Factoryballs', url: 'https://html-games-v2-ten.vercel.app/factoryballs/index.html' },
+  { name: 'Flappy Bird', url: 'https://html-games-v2-ten.vercel.app/flappy-bird/index.html' },
+  { name: 'Friday Night Funkin', url: 'https://html-games-v2-ten.vercel.app/fridaynightfunkin/index.html' },
+  { name: 'Fruit Ninja', url: 'https://html-games-v2-ten.vercel.app/fruitninja/index.html' },
+  { name: 'FullScreenMario', url: 'https://html-games-v2-ten.vercel.app/FullScreenMario/Source/index.htm' },
+  { name: 'Geometry Dash', url: 'https://html-games-v2-ten.vercel.app/geometrydash/index.html' },
+  { name: 'Google Snake', url: 'https://html-games-v2-ten.vercel.app/google-snake/index.html' },
+  { name: 'Google Solitaire', url: 'https://html-games-v2-ten.vercel.app/google-solitaire/index.html.html' },
+  { name: 'Happy Wheels', url: 'https://html-games-v2-ten.vercel.app/happy-wheels/index.html' },
+  { name: 'Hextris', url: 'https://html-games-v2-ten.vercel.app/hextris/index.html' },
+  { name: 'Impossible Quiz', url: 'https://html-games-v2-ten.vercel.app/impossiblequiz/index.html' },
+  { name: 'Iscribble.io', url: 'https://html-games-v2-ten.vercel.app/iscribble-io/index.html' },
+  { name: 'Justfall.lol', url: 'https://html-games-v2-ten.vercel.app/justfall/index.html' },
+  { name: 'Kartfight.io', url: 'https://html-games-v2-ten.vercel.app/kart-fight-io/index.html' },
+  { name: 'Kitchen Gun Game', url: 'https://html-games-v2-ten.vercel.app/kitchen-gun-game/index.html' },
+  { name: 'Krunker', url: 'https://html-games-v2-ten.vercel.app/krunker/index.html' },
+  { name: 'Learn To Fly', url: 'https://html-games-v2-ten.vercel.app/learntofly/index.html' },
+  { name: 'Madalin Stunt Cars 2', url: 'https://html-games-v2-ten.vercel.app/madalin-stunt-cars-2/index.html' },
+  { name: 'Make it meme', url: 'https://html-games-v2-ten.vercel.app/makeitmeme/index.html' },
+  { name: 'Minecraft 1.5.2', url: 'https://html-games-v2-ten.vercel.app/mc1.5.2/index.html' },
+  { name: 'Meat Boy', url: 'https://html-games-v2-ten.vercel.app/meat-boy/index.html' },
+  { name: 'Minesweeper', url: 'https://html-games-v2-ten.vercel.app/minesweeper/index.html' },
+  { name: 'Moto X3M', url: 'https://html-games-v2-ten.vercel.app/motox3m/index.html' },
+  { name: 'Moto X3M2', url: 'https://html-games-v2-ten.vercel.app/motox3m2/index.html' },
+  { name: 'My Friend Pedro', url: 'https://html-games-v2-ten.vercel.app/my-friend-pedro/index.html' },
+  { name: 'Osu', url: 'https://html-games-v2-ten.vercel.app/osu/index.html' },
+  { name: 'Pacman', url: 'https://html-games-v2-ten.vercel.app/pacman/index.html' },
+  { name: 'Retro Bowl', url: 'https://html-games-v2-ten.vercel.app/retro-bowl/index.html' },
+  { name: 'Slither', url: 'https://html-games-v2-ten.vercel.app/slither/index.html' },
+  { name: 'Slope', url: 'https://html-games-v2-ten.vercel.app/slope/index.html' },
+  { name: 'Solitaire', url: 'https://html-games-v2-ten.vercel.app/solitaire/index.html' },
+  { name: 'Sm64', url: 'https://html-games-v2-ten.vercel.app/sm64/index.html' },
+  { name: 'Sonic The Hedgehog', url: 'https://html-games-v2-ten.vercel.app/sonic-the-hedgehog/src/index.html' },
+  { name: 'Soundboard', url: 'https://html-games-v2-ten.vercel.app/soundboard/index.html' },
+  { name: 'Stickman', url: 'https://html-games-v2-ten.vercel.app/stickman/index.html' },
+  { name: 'Subway Surfers', url: 'https://html-games-v2-ten.vercel.app/subway-surfers/index.html' },
+  { name: 'Super Mario Maker Online', url: 'https://html-games-v2-ten.vercel.app/super-mario-maker-online/index.html' },
+  { name: 'Superhero.io', url: 'https://html-games-v2-ten.vercel.app/superhero-io/index.html' },
+  { name: 'Superhot', url: 'https://html-games-v2-ten.vercel.app/superhot/index.html' },
+  { name: 'Temple Run 2', url: 'https://html-games-v2-ten.vercel.app/temple-run-2/index.html' },
+  { name: 'Tetris', url: 'https://html-games-v2-ten.vercel.app/tetris/index.html' },
+  { name: 'The Impossible Quiz', url: 'https://html-games-v2-ten.vercel.app/the-impossible-quiz/index.html' },
+  { name: 'The Impossible Quiz 2', url: 'https://html-games-v2-ten.vercel.app/the-impossible-quiz-2/index.html' },
+  { name: 'The Heist', url: 'https://html-games-v2-ten.vercel.app/theheist/index.html' },
+  { name: 'Time Shooter 3', url: 'https://html-games-v2-ten.vercel.app/time-shooter-3/index.html' },
+  { name: 'Townscaper', url: 'https://html-games-v2-ten.vercel.app/townscaper/index.html' },
+  { name: 'Underrun', url: 'https://html-games-v2-ten.vercel.app/underrun/index.html' },
+  { name: 'Wordle', url: 'https://html-games-v2-ten.vercel.app/wordle/index.html' },
+  { name: 'You are Bezos', url: 'https://html-games-v2-ten.vercel.app/you-are-bezos/index.html' },
+  { name: 'Zig Zag', url: 'https://html-games-v2-ten.vercel.app/zig-zag/index.html' },
+  { name: 'Zombie Apocalypse', url: 'https://html-games-v2-ten.vercel.app/zombocalypse/index.html' },
+  { name: 'Zombs Royale', url: 'https://html-games-v2-ten.vercel.app/zombs-royale/index.html' }
+];
+
+// Sort alphabetically
+games.sort((a, b) => a.name.localeCompare(b.name));
+
+// Create buttons dynamically
+games.forEach(game => {
+  const btn = document.createElement('button');
+  btn.className = 'game-button';
+  btn.innerText = game.name;
+  btn.onclick = () => window.location.href = game.url;
+  container.appendChild(btn);
+});
+
+
+// Apps
+const apps=[
+{ name:'YouTube', url:'https://www.youtube.com' },
+{ name:'Google', url:'https://www.google.com' },
+{ name:'VS Code', url:'https://vscode.dev/' },
+{ name:'ChatGPT', url:'https://chat.openai.com/' },
+{ name:'GeForce NOW', url:'https://www.nvidia.com/en-us/geforce-now/' },
+].sort((a,b)=>a.name.localeCompare(b.name));
+
+// Flash Games
+const flashGames=[
+{ name:'Flash Museum', url:'1/flash-games/index.html' }
+];
+
+// Unblockers
+const unblockers=[
+{ name:'Utopia Unblocker', url:'1/unblocker/main.html' },
+{ name:'ArtClass', url:'https://artclass-pink.vercel.app/' }
+];
+
+// Placeholder icons
+function generatePlaceholderIcon(name){
+    const canvas=document.createElement('canvas'); canvas.width=80; canvas.height=80;
+    const ctx=canvas.getContext('2d'); ctx.fillStyle='black'; ctx.fillRect(0,0,80,80);
+    ctx.fillStyle='white'; ctx.font='bold 40px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(name[0].toUpperCase(),40,40); return canvas.toDataURL();
+}
+
+// Render items
+function renderItems(containerId, items, isGame=true){
+    const container=document.getElementById(containerId); container.innerHTML='';
+    items.forEach(item=>{
+        const card=document.createElement('div'); card.className=isGame?'game-card':'apps-card';
+        const img=document.createElement('img'); img.src=generatePlaceholderIcon(item.name);
+        const btn=document.createElement('button'); btn.innerText=item.name;
+        btn.onclick=()=>openItem(item,isGame);
+        card.appendChild(img); card.appendChild(btn); container.appendChild(card);
+    });
+}
+
+// Open game/app/flash/unblocker
+function openItem(item,isGame=true){
+    if(isGame){ document.getElementById('games-container').style.display='none'; }
+    else { document.getElementById('apps-container').style.display='none'; document.getElementById('flash-container').style.display='none'; document.getElementById('unblockers-container').style.display='none'; }
+    document.getElementById('game-title').innerText=item.name;
+    document.getElementById('game-frame').src=item.url;
+    document.getElementById('game-window').style.display='flex';
+}
+
+// Close game
+function closeGame(){
+    document.getElementById('game-window').style.display='none';
+    document.getElementById('game-frame').src='';
+    document.getElementById('games-container').style.display='flex';
+    document.getElementById('apps-container').style.display='flex';
+    document.getElementById('flash-container').style.display='flex';
+    document.getElementById('unblockers-container').style.display='flex';
+}
+
+// Fullscreen
+function toggleFullscreen(){ const el=document.getElementById('game-frame'); if(el.requestFullscreen) el.requestFullscreen(); else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen(); }
+
+// Like/dislike
+function likeGame(){ alert('Liked!'); }
+function dislikeGame(){ alert('Disliked!'); }
+
+// Show section
+function showSection(sectionId){
+    document.querySelectorAll('.section').forEach(sec=>sec.classList.remove('active'));
+    document.getElementById(sectionId).classList.add('active');
+    document.getElementById('welcome-screen').style.display='none';
+}
+
+// Search filter
+function filterItems(){
+    const query=document.getElementById('search-bar').value.toLowerCase();
+    document.querySelectorAll('.game-card, .apps-card').forEach(card=>{
+        card.style.display=card.querySelector('button').innerText.toLowerCase().includes(query)?'flex':'none';
+    });
+}
+
+// Players online
+function updatePlayersOnline(){
+    const count=Math.floor(Math.random()*500)+50; // realistic random online count
+    document.getElementById('online-count').innerText=count;
+}
+setInterval(updatePlayersOnline,5000);
+updatePlayersOnline();
+
+// Initial render
+renderItems('games-container',games,true);
+renderItems('apps-container',apps,false);
+renderItems('flash-container',flashGames,true);
+renderItems('unblockers-container',unblockers,false);
+</script>
+</body>
+</html>
