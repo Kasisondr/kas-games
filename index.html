@@ -26,9 +26,6 @@ h1,h2 { margin-bottom:10px; }
 </style>
 </head>
 <body>
-
-<button id="theme-toggle">🌙</button>
-
 <div id="welcome-screen">
     <h1>Welcome to Kas`s Games</h1>
     <div id="players-online">Players Online: <span id="online-count">0</span></div>
@@ -116,9 +113,11 @@ const games = [
   { name: 'Black hole Square', url: 'https://html-games-v2-ten.vercel.app/blackholesquare/index.html' },
   { name: 'Black Knight', url: 'https://html-games-v2-ten.vercel.app/blackknight/index.html' },
   { name: 'Blocky Snakes', url: 'https://html-games-v2-ten.vercel.app/blocky-snakes/index.html' },
+  { name: 'Bottle Flip 3D', url: 'https://nate-games.com/0/g/bf3d/game/' },
   { name: 'BloonsTD', url: 'https://html-games-v2-ten.vercel.app/bloonstd/index.html' },
   { name: 'Breakout', url: 'https://html-games-v2-ten.vercel.app/breakout/index.html' },
   { name: 'Burning Man 2', url: 'https://html-games-v2-ten.vercel.app/burning-man-2/index.html' },
+  { name: 'Call of Duty', url: 'https://nzp.gay/' },
   { name: 'Canyon Defence', url: 'https://html-games-v2-ten.vercel.app/canyondefense/index.html' },
   { name: 'Car simulator', url: 'https://html-games-v2-ten.vercel.app/cars-simulator/index.html' },
   { name: 'Champion archer', url: 'https://html-games-v2-ten.vercel.app/championarcher/index.html' },
@@ -126,6 +125,7 @@ const games = [
   { name: 'Chrome Dino', url: 'https://html-games-v2-ten.vercel.app/chrome-dino/index.html' },
   { name: 'Cookie Clicker', url: 'https://html-games-v2-ten.vercel.app/cookie-clicker/index.html' },
   { name: 'CSGO Clicker', url: 'https://html-games-v2-ten.vercel.app/csgo-clicker/index.html' },
+  { name: 'Counter Strike', url: 'https://game.play-cs.com/' },  
   { name: 'Crossyroad', url: 'https://html-games-v2-ten.vercel.app/crossyroad/index.html' },
   { name: 'Cut the Rope', url: 'https://html-games-v2-ten.vercel.app/cuttherope/index.html' },
   { name: 'Doge Mining Simulator', url: 'https://html-games-v2-ten.vercel.app/doge-mining-simulator/index.html' },
@@ -134,11 +134,13 @@ const games = [
   { name: 'Edge Surf', url: 'https://html-games-v2-ten.vercel.app/edge-surf/index.html' },
   { name: 'Emulator JS', url: 'https://html-games-v2-ten.vercel.app/emulator-js/index.html' },
   { name: 'Factoryballs', url: 'https://html-games-v2-ten.vercel.app/factoryballs/index.html' },
+  { name: 'Fall Guys', url: 'https://nate-games.com/0/g/fallguys/game/' },  
   { name: 'Flappy Bird', url: 'https://html-games-v2-ten.vercel.app/flappy-bird/index.html' },
   { name: 'Friday Night Funkin', url: 'https://html-games-v2-ten.vercel.app/fridaynightfunkin/index.html' },
   { name: 'Fruit Ninja', url: 'https://html-games-v2-ten.vercel.app/fruitninja/index.html' },
   { name: 'FullScreenMario', url: 'https://html-games-v2-ten.vercel.app/FullScreenMario/Source/index.htm' },
   { name: 'Geometry Dash', url: 'https://html-games-v2-ten.vercel.app/geometrydash/index.html' },
+  { name: 'Getting Over It', url: 'https://nate-games.com/0/g/gettingoverit/game/' },  
   { name: 'Google Snake', url: 'https://html-games-v2-ten.vercel.app/google-snake/index.html' },
   { name: 'Google Solitaire', url: 'https://html-games-v2-ten.vercel.app/google-solitaire/index.html.html' },
   { name: 'Happy Wheels', url: 'https://html-games-v2-ten.vercel.app/happy-wheels/index.html' },
@@ -157,10 +159,12 @@ const games = [
   { name: 'Minesweeper', url: 'https://html-games-v2-ten.vercel.app/minesweeper/index.html' },
   { name: 'Moto X3M', url: 'https://html-games-v2-ten.vercel.app/motox3m/index.html' },
   { name: 'Moto X3M2', url: 'https://html-games-v2-ten.vercel.app/motox3m2/index.html' },
+  { name: 'Mr Racer - Car Racing', url: 'https://c028ff4c-0437-4782-a8ef-6f30b2eb3fb8.poki-gdn.com/d4490a2d-c8d4-4a49-92bf-ebd989b8a246/index.html?country=GB&ccpaApplies=0&url_referrer=https%3A%2F%2Fpoki.com%2F&tag=pg-6d6d4ba4c1c6e6c7eb15604060cbcbf4f8572cb1&site_id=3&iso_lang=en&poki_url=https%3A%2F%2Fpoki.com%2Fen%2Fg%2Fmr-racer-car-racing&hoist=yes&nonPersonalized=y&cloudsavegames=n&familyFriendly=y&categories=1%2C3%2C9%2C78%2C893%2C1140%2C1190&experiment=control-959a0db8&csp=2&game_id=c028ff4c-0437-4782-a8ef-6f30b2eb3fb8&game_version_id=d4490a2d-c8d4-4a49-92bf-ebd989b8a246&inspector=0' },
   { name: 'My Friend Pedro', url: 'https://html-games-v2-ten.vercel.app/my-friend-pedro/index.html' },
   { name: 'Osu', url: 'https://html-games-v2-ten.vercel.app/osu/index.html' },
   { name: 'Pacman', url: 'https://html-games-v2-ten.vercel.app/pacman/index.html' },
   { name: 'Retro Bowl', url: 'https://html-games-v2-ten.vercel.app/retro-bowl/index.html' },
+  { name: 'POLLYTRACK', url: 'https://e99d8635-de89-44c9-a1bf-86654ad3f05d.poki-gdn.com/c86fc9b6-04c2-4606-86bf-f41d960ce6c0/index.html?country=GB&ccpaApplies=0&url_referrer=https%3A%2F%2Fpoki.com%2F&tag=pg-6d6d4ba4c1c6e6c7eb15604060cbcbf4f8572cb1&site_id=3&iso_lang=en&poki_url=https%3A%2F%2Fpoki.com%2Fen%2Fg%2Fpolytrack&hoist=yes&nonPersonalized=y&cloudsavegames=n&familyFriendly=y&categories=1%2C78%2C893%2C1178%2C1190&experiment=control-959a0db8&csp=2&game_id=e99d8635-de89-44c9-a1bf-86654ad3f05d&game_version_id=c86fc9b6-04c2-4606-86bf-f41d960ce6c0&inspector=0' },
   { name: 'Slither', url: 'https://html-games-v2-ten.vercel.app/slither/index.html' },
   { name: 'Slope', url: 'https://html-games-v2-ten.vercel.app/slope/index.html' },
   { name: 'Solitaire', url: 'https://html-games-v2-ten.vercel.app/solitaire/index.html' },
@@ -168,12 +172,13 @@ const games = [
   { name: 'Sonic The Hedgehog', url: 'https://html-games-v2-ten.vercel.app/sonic-the-hedgehog/src/index.html' },
   { name: 'Soundboard', url: 'https://html-games-v2-ten.vercel.app/soundboard/index.html' },
   { name: 'Stickman', url: 'https://html-games-v2-ten.vercel.app/stickman/index.html' },
-  { name: 'Subway Surfers', url: 'https://html-games-v2-ten.vercel.app/subway-surfers/index.html' },
+  { name: 'Subway Surfers', url: 'https://5dd312fa-015f-11ea-ad56-9cb6d0d995f7.poki-gdn.com/54bd3efd-96ec-4678-9c08-9d2dd096b99f/index.html?country=GB&amp;ccpaApplies=0&amp;url_referrer=https%3A%2F%2Fpoki.com%2F&amp;tag=pg-6d6d4ba4c1c6e6c7eb15604060cbcbf4f8572cb1&amp;site_id=3&amp;iso_lang=en&amp;poki_url=https%3A%2F%2Fpoki.com%2Fen%2Fg%2Fsubway-surfers&amp;hoist=yes&amp;nonPersonalized=y&amp;cloudsavegames=n&amp;familyFriendly=y&amp;categories=3%2C4%2C6%2C9%2C86%2C93%2C103%2C183%2C228%2C903%2C929%2C1140%2C1177%2C1185%2C1190%2C1193&amp;experiment=control-959a0db8&amp;csp=2&amp;game_id=5dd312fa-015f-11ea-ad56-9cb6d0d995f7&amp;game_version_id=54bd3efd-96ec-4678-9c08-9d2dd096b99f&amp;inspector=0' },
   { name: 'Super Mario Maker Online', url: 'https://html-games-v2-ten.vercel.app/super-mario-maker-online/index.html' },
   { name: 'Superhero.io', url: 'https://html-games-v2-ten.vercel.app/superhero-io/index.html' },
   { name: 'Superhot', url: 'https://html-games-v2-ten.vercel.app/superhot/index.html' },
   { name: 'Temple Run 2', url: 'https://html-games-v2-ten.vercel.app/temple-run-2/index.html' },
   { name: 'Tetris', url: 'https://html-games-v2-ten.vercel.app/tetris/index.html' },
+  { name: 'Terraria', url: 'https://nate-games.com/0/g/Terraria/game/' },
   { name: 'The Impossible Quiz', url: 'https://html-games-v2-ten.vercel.app/the-impossible-quiz/index.html' },
   { name: 'The Impossible Quiz 2', url: 'https://html-games-v2-ten.vercel.app/the-impossible-quiz-2/index.html' },
   { name: 'The Heist', url: 'https://html-games-v2-ten.vercel.app/theheist/index.html' },
@@ -181,6 +186,9 @@ const games = [
   { name: 'Townscaper', url: 'https://html-games-v2-ten.vercel.app/townscaper/index.html' },
   { name: 'Underrun', url: 'https://html-games-v2-ten.vercel.app/underrun/index.html' },
   { name: 'Wordle', url: 'https://html-games-v2-ten.vercel.app/wordle/index.html' },
+  { name: 'World`s Hardest Game', url: ' https://nate-games.com/0/g/whg/game/' },
+  { name: 'World`s Hardest Game 2', url: ' https://nate-games.com/0/g/whg2/game/' },
+  { name: 'World`s Hardest Game 3', url: ' https://nate-games.com/0/g/whg3/game/' },
   { name: 'You are Bezos', url: 'https://html-games-v2-ten.vercel.app/you-are-bezos/index.html' },
   { name: 'Zig Zag', url: 'https://html-games-v2-ten.vercel.app/zig-zag/index.html' },
   { name: 'Zombie Apocalypse', url: 'https://html-games-v2-ten.vercel.app/zombocalypse/index.html' },
@@ -207,11 +215,12 @@ const apps=[
 { name:'VS Code', url:'https://vscode.dev/' },
 { name:'ChatGPT', url:'https://chat.openai.com/' },
 { name:'GeForce NOW', url:'https://www.nvidia.com/en-us/geforce-now/' },
+{ name:'Now.gg', url:'https://selfstudybrain.com/' },
 ].sort((a,b)=>a.name.localeCompare(b.name));
 
 // Flash Games
 const flashGames=[
-{ name:'Flash Museum', url:'1/flash-games/index.html' }
+{ name:'Flash Games', url:'https://flash-games.io/' }
 ];
 
 // Unblockers
