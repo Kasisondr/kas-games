@@ -91,24 +91,21 @@ button {
     transform: scale(1.05);
 }
 
-/* Sections */
 .section {
     display: none;
     padding: 20px;
 }
+
 .section.active {
-    display: block;
+    display: block !important;
 }
 
-/* Back button */
 .back-btn {
-    margin-bottom: 20px;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    background: var(--color-3);
-    color: var(--text-color);
+    background: var(--color-3) !important;
+    color: var(--text-color) !important;
+    border: none !important;
 }
+
 
 /* Search bar */
 #search-bar {
@@ -394,19 +391,43 @@ button {
 // Section tracking
 let lastSection = null;
 
-// Show section
-function showSection(sectionId){
-    document.querySelectorAll('.section').forEach(sec=>sec.classList.remove('active'));
-    document.getElementById(sectionId).classList.add('active');
-    document.getElementById('welcome-screen').style.display='none';
+function showSection(sectionId) {
+    // Hide all sections
+    document.querySelectorAll('.section').forEach(sec => {
+        sec.classList.remove('active');
+    });
+
+    // Show selected section
+    const section = document.getElementById(sectionId);
+    section.classList.add('active');
+    section.style.display = "block";
+
+    // Hide main menu
+    document.getElementById('welcome-screen').style.display = 'none';
+
+    // Close any open game
+    closeGame();
+
+    // Track which section is open
     lastSection = sectionId;
 }
 
-// Back to main
-function backToMain(btn){
-    btn.parentElement.classList.remove('active');
-    document.getElementById('welcome-screen').style.display='flex';
+function backToMain(btn) {
+    // Hide all sections
+    document.querySelectorAll('.section').forEach(sec => {
+        sec.classList.remove('active');
+        sec.style.display = "none";
+    });
+
+    // Show main menu
+    document.getElementById('welcome-screen').style.display = 'flex';
+
+    // Close game window
+    closeGame();
+
+    lastSection = null;
 }
+
 
 // Game window
 function openItem(item){
