@@ -200,14 +200,6 @@ const games = [
 // Sort alphabetically
 games.sort((a, b) => a.name.localeCompare(b.name));
 
-// Create buttons dynamically
-games.forEach(game => {
-  const btn = document.createElement('button');
-  btn.className = 'game-button';
-  btn.innerText = game.name;
-  btn.onclick = () => window.location.href = game.url;
-  container.appendChild(btn);
-});
 
 
 // Apps
