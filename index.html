@@ -243,6 +243,81 @@ button {
 .theme-option:hover {
     background: var(--color-2);
 }
+.news-card {
+    width: 300px; 
+    background: color-mix(in srgb, var(--color-3) 30%, var(--color-4) 70%);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.news-card:hover {
+    background: var(--color-2);
+    transform: scale(1.03);
+}
+
+.news-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+}
+
+.news-card p {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.news-card button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: var(--color-4);
+    color: var(--text-color);
+    width: 100%;
+}
+
+.news-card button:hover {
+    background: var(--color-2);
+    transform: scale(1.05);
+}
+#news-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+#discord-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    background: var(--color-3); /* uses the theme accent color */
+    color: var(--text-color);
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+#discord-btn:hover {
+    background: var(--color-2); /* slightly lighter accent on hover */
+    transform: scale(1.05);
+}
+#discord-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+
+/* Make sure the wrapper is centered on all screen sizes */
+#news-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+}
+
+
 </style>
 </head>
 <body>
@@ -256,6 +331,13 @@ button {
         <button onclick="showSection('flash')">Flash Games</button>
         <button onclick="showSection('unblockers')">Unblockers</button>
     </div>
+    <!-- Latest News: right below buttons -->
+    <div id="news-section" style="margin-top: 20px; width: 100%;">
+        <h2 style="text-align:center; margin-bottom: 15px;">Latest News</h2>
+        <div class="button-container" id="news-container" style="justify-content: center; gap: 15px;"></div>
+        <button id="discord-btn">Join our Discord</button>
+    </div>
+</div>
 </div>
 
 <button id="settings-btn" onclick="toggleThemeModal()">Settings ⚙️</button>
@@ -342,6 +424,10 @@ function closeGame(){
     if(lastSection) document.getElementById(lastSection).style.display='flex';
     else document.getElementById('welcome-screen').style.display='flex';
 }
+document.getElementById('discord-btn').onclick = function() {
+    window.open('https://discord.gg/X6m7TtSXrM', '_blank');
+};
+
 function toggleFullscreen(){
     const el = document.getElementById('game-frame');
     if(el.requestFullscreen) el.requestFullscreen();
@@ -559,6 +645,29 @@ const apps=[{ name:'YouTube', url:'https://www.youtube.com' },
 { name:'Now.gg', url:'https://selfstudybrain.com/' },].sort((a,b)=>a.name.localeCompare(b.name));
 const flashGames=[{ name:'Flash Games', url:'https://flash-games.io/' }];
 const unblockers=[{name:'ArtClass',url:'https://artclass-pink.vercel.app/'}];
+const newsItems = [
+    { title: "Kas's Games Update!", description: "GTA, Hollow Knight, Undertale And MORE!"},
+];
+
+function renderNews(containerId, items){
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'news-card';
+        const title = document.createElement('h3'); title.innerText = item.title;
+        const desc = document.createElement('p'); desc.innerText = item.description;
+        const btn = document.createElement('button'); btn.innerText = 'Read More';
+        btn.onclick = () => window.open(item.url, '_blank');
+        card.appendChild(title);
+        card.appendChild(desc);
+        card.appendChild(btn);
+        container.appendChild(card);
+    });
+}
+
+// Render news on welcome screen
+renderNews('news-container', newsItems);
 
 renderItems('games-container',games);
 renderItems('apps-container',apps);
