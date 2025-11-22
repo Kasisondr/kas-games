@@ -356,6 +356,8 @@ button {
 <button id="settings-btn" onclick="toggleThemeModal()">Settings ⚙️</button>
 
 <input type="text" id="search-bar" placeholder="Search..." oninput="filterItems()">
+<div id="items-loaded" style="text-align:center; margin-top:-10px; margin-bottom:10px; font-size:18px;"></div>
+
 
 <!-- Sections -->
 <div id="games" class="section">
@@ -406,11 +408,11 @@ button {
 <script>
 // Section tracking
 let lastSection = null;
-
 function showSection(sectionId) {
     // Hide all sections
     document.querySelectorAll('.section').forEach(sec => {
         sec.classList.remove('active');
+        sec.style.display = "none";
     });
 
     // Show selected section
@@ -426,7 +428,23 @@ function showSection(sectionId) {
 
     // Track which section is open
     lastSection = sectionId;
+
+    // Count items and display text
+    updateItemsLoaded(sectionId);
 }
+function updateItemsLoaded(sectionId) {
+    const display = document.getElementById('items-loaded');
+
+    let count = 0;
+
+    if (sectionId === "games") count = games.length;
+    else if (sectionId === "apps") count = apps.length;
+    else if (sectionId === "flash") count = flashGames.length;
+    else if (sectionId === "unblockers") count = unblockers.length;
+
+    display.innerText = `${count} items loaded!`;
+}
+
 
 function backToMain(btn) {
     // Hide all sections
