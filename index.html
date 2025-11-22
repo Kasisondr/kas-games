@@ -566,6 +566,11 @@ function renderItems(containerId, items){
     });
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("warning").forEach(el => el.remove());
+});
+
+
 
 // Example items
 const games = [
