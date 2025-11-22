@@ -406,9 +406,15 @@ button {
 </div>
 
 <script>
-// Section tracking
+// Track current section
 let lastSection = null;
 function showSection(sectionId) {
+    // Hide welcome screen
+    document.getElementById('welcome-screen').style.display = 'none';
+    
+    // Show search bar only for sections
+    document.getElementById('search-bar').style.display = 'block';
+    
     // Hide all sections
     document.querySelectorAll('.section').forEach(sec => {
         sec.classList.remove('active');
@@ -420,9 +426,6 @@ function showSection(sectionId) {
     section.classList.add('active');
     section.style.display = "block";
 
-    // Hide main menu
-    document.getElementById('welcome-screen').style.display = 'none';
-
     // Close any open game
     closeGame();
 
@@ -432,53 +435,53 @@ function showSection(sectionId) {
     // Count items and display text
     updateItemsLoaded(sectionId);
 }
-function updateItemsLoaded(sectionId) {
-    const display = document.getElementById('items-loaded');
-
-    let count = 0;
-
-    if (sectionId === "games") count = games.length;
-    else if (sectionId === "apps") count = apps.length;
-    else if (sectionId === "flash") count = flashGames.length;
-    else if (sectionId === "unblockers") count = unblockers.length;
-
-    display.innerText = `${count} items loaded!`;
-}
 
 
-function backToMain(btn) {
+// Return to main welcome screen
+function backToMain() {
     // Hide all sections
     document.querySelectorAll('.section').forEach(sec => {
         sec.classList.remove('active');
-        sec.style.display = "none";
+        sec.style.display = 'none';
     });
-
-    // Show main menu
-    document.getElementById('welcome-screen').style.display = 'flex';
 
     // Close game window
     closeGame();
 
+    // Show welcome screen
+    document.getElementById('welcome-screen').style.display = 'flex';
+
     lastSection = null;
 }
 
+// Open a game or app
+function openItem(item) {
+    if(!lastSection) return; // safety check
 
-// Game window
-function openItem(item){
-    document.getElementById('games-container').style.display='none';
-    document.getElementById('apps-container').style.display='none';
-    document.getElementById('flash-container').style.display='none';
-    document.getElementById('unblockers-container').style.display='none';
+    // Hide only the container of the current section
+    const container = document.getElementById(lastSection + '-container');
+    container.style.display = 'none';
+
+    // Show game window
     document.getElementById('game-title').innerText = item.name;
     document.getElementById('game-frame').src = item.url;
-    document.getElementById('game-window').style.display='flex';
+    document.getElementById('game-window').style.display = 'flex';
 }
-function closeGame(){
-    document.getElementById('game-window').style.display='none';
-    document.getElementById('game-frame').src='';
-    if(lastSection) document.getElementById(lastSection).style.display='flex';
-    else document.getElementById('welcome-screen').style.display='flex';
+
+// Close game window
+// optional param 'keepSection' = true if we only want to close game without hiding section
+function closeGame(keepSection = false) {
+    const gameWindow = document.getElementById('game-window');
+    gameWindow.style.display = 'none';
+    document.getElementById('game-frame').src = '';
+
+    // Restore section container if a section is active
+    if(lastSection && keepSection !== true) {
+        document.getElementById(lastSection + '-container').style.display = 'flex';
+    }
 }
+
+
 document.getElementById('discord-btn').onclick = function() {
     window.open('https://discord.gg/X6m7TtSXrM', '_blank');
 };
@@ -562,6 +565,7 @@ function renderItems(containerId, items){
         card.appendChild(img); card.appendChild(btn); container.appendChild(card);
     });
 }
+
 
 // Example items
 const games = [
