@@ -870,6 +870,8 @@ renderItems('unblockers-container',unblockers);
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("warning").forEach(el => el.remove());
 });
+<script>
+// Track the last clicked link
 let lastClickedLink = null;
 
 // Listen for clicks on any link
@@ -885,12 +887,19 @@ document.addEventListener("click", function(e) {
 document.addEventListener("keydown", function(e) {
     if (e.key === "Tab" && lastClickedLink) {
         e.preventDefault(); // prevent default tabbing
-        const iframe = document.querySelector("iframe"); // select first iframe on page
-        if (iframe) {
-            iframe.src = lastClickedLink; // update iframe src
-        }
+        // Open the stored link in the iframe
+        const gameWindow = document.getElementById('game-window');
+        const gameFrame = document.getElementById('game-frame');
+        const gameTitle = document.getElementById('game-title');
+
+        gameTitle.innerText = lastClickedLink.split("/").pop(); // simple name from URL
+        gameFrame.src = lastClickedLink;
+        gameWindow.style.display = 'flex';
+
+        lastClickedLink = null; // reset
     }
 });
+
 
 </script>
 </body>
