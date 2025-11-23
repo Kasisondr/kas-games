@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kas`s Games</title>
+<title>quantum</title>
 <style>
 /* Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Mulish&display=swap');
@@ -12,7 +12,8 @@
 :root {
     --text-color: #fff;
     --bg-1: #5a189a;    /* purple base */
-    --bg-2: #10002b;    /* dark purple background */
+    --bg-2: #10002b; 
+    --bg-3: #E3170A;   /* dark purple background */
     --color-1: #E0AAFF; /* light purple accent */
     --color-2: #7B2CBF; /* medium purple accent */
     --color-3: #3C096C; /* dark purple accent */
@@ -336,7 +337,7 @@ button {
 <body>
 
 <div id="welcome-screen">
-    <h1>Welcome to Kas`s Games</h1>
+    <h1>quantum.</h1>
     <div id="players-online">Players Online: <span id="online-count">0</span></div>
     <div class="welcome-buttons">
         <button onclick="showSection('games')">Games</button>
@@ -528,6 +529,13 @@ function applyTheme(color){
         root.style.setProperty('--color-3','#0077b6');
         root.style.setProperty('--color-4','#023e8a');
     } else if(color==='green'){
+        root.style.setProperty('--bg-1','#38b000');
+        root.style.setProperty('--bg-2','#004d00');
+        root.style.setProperty('--color-1','#b7e4c7');
+        root.style.setProperty('--color-2','#70e000');
+        root.style.setProperty('--color-3','#2a9d8f');
+        root.style.setProperty('--color-4','#145214');
+        } else if(color==='red'){
         root.style.setProperty('--bg-1','#38b000');
         root.style.setProperty('--bg-2','#004d00');
         root.style.setProperty('--color-1','#b7e4c7');
