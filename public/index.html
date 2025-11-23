@@ -859,12 +859,6 @@ function renderNews(containerId, items){
         container.appendChild(card);
     });
 }
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll("warning").forEach(el => el.remove());
-});
-
-
-
 // Render news on welcome screen
 renderNews('news-container', newsItems);
 
@@ -875,6 +869,27 @@ renderItems('unblockers-container',unblockers);
 
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("warning").forEach(el => el.remove());
+});
+let lastClickedLink = null;
+
+// Listen for clicks on any link
+document.addEventListener("click", function(e) {
+    const target = e.target.closest("a");
+    if (target) {
+        e.preventDefault(); // prevent default navigation
+        lastClickedLink = target.href; // store the link
+    }
+});
+
+// Listen for Tab key
+document.addEventListener("keydown", function(e) {
+    if (e.key === "Tab" && lastClickedLink) {
+        e.preventDefault(); // prevent default tabbing
+        const iframe = document.querySelector("iframe"); // select first iframe on page
+        if (iframe) {
+            iframe.src = lastClickedLink; // update iframe src
+        }
+    }
 });
 
 </script>
