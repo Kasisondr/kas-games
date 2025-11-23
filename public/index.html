@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quantum Unblocker</title>
+<meta name="description" content="Play games directly in your browser without any ads and restrictions!">
+<style>
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Mulish&display=swap');
+
+/* Theme variables */
+:root {
+    --text-color: #fff;
+    --bg-1: #5a189a;    /* purple base */
+    --bg-2: #10002b; 
+    --bg-3: #E3170A;   /* dark purple background */
+    --color-1: #E0AAFF; /* light purple accent */
+    --color-2: #7B2CBF; /* medium purple accent */
+    --color-3: #3C096C; /* dark purple accent */
+    --color-4: #240046; /* nearly black purple */
+}
+
+/* Base body styles */
+body {
+    margin: 0;
+    font-family: 'Mulish', sans-serif;
+    background-color: var(--bg-2);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    transition: background 0.5s, color 0.5s;
+    user-select: none;
+}
+
+/* Headings */
+h1 { font-size: 48px; margin: 10px; }
+h2 { font-size: 32px; margin: 8px; }
+h3 { font-size: 24px; margin: 4px; }
+
+/* Links */
+a { color: var(--text-color); text-decoration: none; }
+
+/* Buttons */
+button {
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: 'Mulish', sans-serif;
+}
+
+/* Settings button */
+#settings-btn {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    background: var(--color-3);
+    border: none;
+    border-radius: 5px;
+    color: var(--text-color);
+    z-index: 1000;
+}
+
+/* Welcome screen */
+#welcome-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+}
+
+/* Welcome buttons */
+.welcome-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.welcome-buttons button {
+    padding: 15px 25px;
+    border-radius: 10px;
+    background: var(--color-4);
+    color: var(--text-color);
+    font-size: 1.2em;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.welcome-buttons button:hover {
+    background: var(--color-2);
+    transform: scale(1.05);
+}
+.back-btn {
+    padding: 15px 25px;
+    border-radius: 10px;
+    background: var(--color-4);
+    color: var(--text-color);
+    font-size: 1.2em;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    margin-bottom: 20px;
+}
+
+.back-btn:hover {
+    background: var(--color-2);
+    transform: scale(1.05);
+}
+
+.section {
+    display: none;
+    padding: 20px;
+}
+
+.section.active {
+    display: block !important;
+}
+
+.back-btn {
+    background: var(--color-3) !important;
+    color: var(--text-color) !important;
+    border: none !important;
+}
+
+
+/* Search bar */
+#search-bar {
+    width: 100%;
+    max-width: 500px;
+    padding: 12px 18px;
+    margin: 20px auto;
+    border-radius: 12px;
+    border: none;
+    font-size: 1em;
+    background: color-mix(in srgb, var(--color-4) 50%, var(--bg-2) 50%);
+    color: var(--text-color);
+    display: block;
+    transition: background 0.3s, color 0.3s;
+}
+
+/* Container for cards */
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Cards */
+.game-card, .apps-card {
+    width: 150px;
+    background: color-mix(in srgb, var(--color-3) 30%, var(--color-4) 70%);
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.game-card:hover, .apps-card:hover {
+    background: var(--color-2);
+    transform: scale(1.05);
+}
+
+/* Card images */
+.game-card img, .apps-card img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+/* Card buttons */
+.game-card button, .apps-card button {
+    margin-top: auto;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: var(--color-4);
+    color: var(--text-color);
+    width: 100%;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.game-card button:hover, .apps-card button:hover {
+    background: var(--color-2);
+    transform: scale(1.05);
+}
+
+/* Game window */
+#game-window {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background: color-mix(in srgb, var(--color-3) 40%, var(--bg-2) 60%);
+    border-radius: 10px;
+    margin: 20px;
+    width: calc(100% - 40px);
+    transition: background 0.5s;
+}
+
+#game-window iframe {
+    width: 100%;
+    height: 600px;
+    border: none;
+    border-radius: 10px;
+}
+
+/* Game controls */
+#game-controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 900px;
+    margin-top: 10px;
+}
+
+#game-controls button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: var(--color-4);
+    color: var(--text-color);
+    transition: background 0.3s, transform 0.2s;
+}
+
+#game-controls button:hover {
+    background: var(--color-2);
+    transform: scale(1.05);
+}
+
+/* Theme modal */
+#theme-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--bg-2);
+    color: var(--text-color);
+    border-radius: 15px;
+    padding: 20px;
+    z-index: 2000;
+    min-width: 300px;
+}
+
+.theme-option {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    background: var(--color-4);
+    text-align: center;
+}
+.theme-option:hover {
+    background: var(--color-2);
+}
+.news-card {
+    width: 300px; 
+    background: color-mix(in srgb, var(--color-3) 30%, var(--color-4) 70%);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.news-card:hover {
+    background: var(--color-2);
+    transform: scale(1.03);
+}
+
+.news-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+}
+
+.news-card p {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.news-card button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: var(--color-4);
+    color: var(--text-color);
+    width: 100%;
+}
+
+.news-card button:hover {
+    background: var(--color-2);
+    transform: scale(1.05);
+}
+#news-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+#discord-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    background: var(--color-3); /* uses the theme accent color */
+    color: var(--text-color);
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+#discord-btn:hover {
+    background: var(--color-2); /* slightly lighter accent on hover */
+    transform: scale(1.05);
+}
+#discord-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+
+/* Make sure the wrapper is centered on all screen sizes */
+#news-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+}
+
+
+</style>
+</head>
+<body>
+
+<div id="welcome-screen">
+    <h1>quantum.</h1>
+    <div id="players-online">Players Online: <span id="online-count">0</span></div>
+    <div class="welcome-buttons">
+        <button onclick="showSection('games')">Games</button>
+        <button onclick="showSection('apps')">Apps</button>
+        <button onclick="showSection('flash')">Flash Games</button>
+        <button onclick="showSection('unblockers')">Unblockers</button>
+    </div>
+    <!-- Latest News: right below buttons -->
+    <div id="news-section" style="margin-top: 20px; width: 100%;">
+        <h2 style="text-align:center; margin-bottom: 15px;">Latest News</h2>
+        <div class="button-container" id="news-container" style="justify-content: center; gap: 15px;"></div>
+        <button id="discord-btn">Join our Discord</button>
+    </div>
+</div>
+</div>
+
+<button id="settings-btn" onclick="toggleThemeModal()">Settings ⚙️</button>
+
+<input type="text" id="search-bar" placeholder="Search..." oninput="filterItems()">
+<div id="items-loaded" style="text-align:center; margin-top:-10px; margin-bottom:10px; font-size:18px;"></div>
+
+
+<!-- Sections -->
+<div id="games" class="section">
+    <button class="back-btn" onclick="backToMain(this)">← Back</button>
+    <h2>Games</h2>
+    <div class="button-container" id="games-container"></div>
+</div>
+
+<div id="apps" class="section">
+    <button class="back-btn" onclick="backToMain(this)">← Back</button>
+    <h2>Unblocked Apps</h2>
+    <div class="button-container" id="apps-container"></div>
+</div>
+
+<div id="flash" class="section">
+    <button class="back-btn" onclick="backToMain(this)">← Back</button>
+    <h2>Flash Games</h2>
+    <div class="button-container" id="flash-container"></div>
+</div>
+
+<div id="unblockers" class="section">
+    <button class="back-btn" onclick="backToMain(this)">← Back</button>
+    <h2>Unblockers</h2>
+    <div class="button-container" id="unblockers-container"></div>
+</div>
+
+<!-- Game Window -->
+<div id="game-window">
+    <h2 id="game-title"></h2>
+    <iframe id="game-frame" src=""></iframe>
+    <div id="game-controls">
+        <button onclick="likeGame()">👍 Like</button>
+        <button onclick="dislikeGame()">👎 Dislike</button>
+        <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
+        <button onclick="closeGame()">❌ Close</button>
+    </div>
+</div>
+
+<!-- Theme Modal -->
+<div id="theme-modal">
+    <h2>Select Theme</h2>
+    <div class="theme-option" onclick="applyTheme('purple')">Purple</div>
+    <div class="theme-option" onclick="applyTheme('blue')">Blue</div>
+    <div class="theme-option" onclick="applyTheme('green')">Green</div>
+    <div class="theme-option" onclick="toggleThemeModal()">Close</div>
+</div>
+
+<script>
+// Track current section
+let lastSection = null;
+function showSection(sectionId) {
+    // Hide welcome screen
+    document.getElementById('welcome-screen').style.display = 'none';
+    
+    // Show search bar only for sections
+    document.getElementById('search-bar').style.display = 'block';
+    
+    // Hide all sections
+    document.querySelectorAll('.section').forEach(sec => {
+        sec.classList.remove('active');
+        sec.style.display = "none";
+    });
+
+    // Show selected section
+    const section = document.getElementById(sectionId);
+    section.classList.add('active');
+    section.style.display = "block";
+
+    // Close any open game
+    closeGame();
+
+    // Track which section is open
+    lastSection = sectionId;
+
+    // Count items and display text
+    updateItemsLoaded(sectionId);
+}
+
+
+// Return to main welcome screen
+function backToMain() {
+    // Hide all sections
+    document.querySelectorAll('.section').forEach(sec => {
+        sec.classList.remove('active');
+        sec.style.display = 'none';
+    });
+
+    // Close game window
+    closeGame();
+
+    // Show welcome screen
+    document.getElementById('welcome-screen').style.display = 'flex';
+
+    lastSection = null;
+}
+
+// Open a game or app
+function openItem(item) {
+    if(!lastSection) return; // safety check
+
+    // Hide only the container of the current section
+    const container = document.getElementById(lastSection + '-container');
+    container.style.display = 'none';
+
+    // Show game window
+    document.getElementById('game-title').innerText = item.name;
+    document.getElementById('game-frame').src = item.url;
+    document.getElementById('game-window').style.display = 'flex';
+}
+
+// Close game window
+// optional param 'keepSection' = true if we only want to close game without hiding section
+function closeGame(keepSection = false) {
+    const gameWindow = document.getElementById('game-window');
+    gameWindow.style.display = 'none';
+    document.getElementById('game-frame').src = '';
+
+    // Restore section container if a section is active
+    if(lastSection && keepSection !== true) {
+        document.getElementById(lastSection + '-container').style.display = 'flex';
+    }
+}
+
+
+document.getElementById('discord-btn').onclick = function() {
+    window.open('https://discord.gg/X6m7TtSXrM', '_blank');
+};
+
+function toggleFullscreen(){
+    const el = document.getElementById('game-frame');
+    if(el.requestFullscreen) el.requestFullscreen();
+    else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+}
+function likeGame(){ alert('Liked!'); }
+function dislikeGame(){ alert('Disliked!'); }
+
+// Search
+function filterItems(){
+    const query = document.getElementById('search-bar').value.toLowerCase();
+    const container = lastSection ? document.getElementById(lastSection + '-container') : null;
+    if(!container) return;
+    container.querySelectorAll('.game-card, .apps-card').forEach(card=>{
+        card.style.display = card.querySelector('button').innerText.toLowerCase().includes(query) ? 'flex' : 'none';
+    });
+}
+
+// Theme modal
+function toggleThemeModal(){
+    const modal = document.getElementById('theme-modal');
+    modal.style.display = modal.style.display==='block'?'none':'block';
+}
+
+// Theme apply
+function applyTheme(color){
+    const root = document.documentElement;
+    if(color==='purple'){
+        root.style.setProperty('--bg-1','#5a189a');
+        root.style.setProperty('--bg-2','#10002b');
+        root.style.setProperty('--color-1','#E0AAFF');
+        root.style.setProperty('--color-2','#7B2CBF');
+        root.style.setProperty('--color-3','#3C096C');
+        root.style.setProperty('--color-4','#240046');
+    } else if(color==='blue'){
+        root.style.setProperty('--bg-1','#0d6efd');
+        root.style.setProperty('--bg-2','#03045e');
+        root.style.setProperty('--color-1','#90e0ef');
+        root.style.setProperty('--color-2','#00b4d8');
+        root.style.setProperty('--color-3','#0077b6');
+        root.style.setProperty('--color-4','#023e8a');
+    } else if(color==='green'){
+        root.style.setProperty('--bg-1','#38b000');
+        root.style.setProperty('--bg-2','#004d00');
+        root.style.setProperty('--color-1','#b7e4c7');
+        root.style.setProperty('--color-2','#70e000');
+        root.style.setProperty('--color-3','#2a9d8f');
+        root.style.setProperty('--color-4','#145214');
+        } else if(color==='red'){
+        root.style.setProperty('--bg-1','#38b000');
+        root.style.setProperty('--bg-2','#004d00');
+        root.style.setProperty('--color-1','#b7e4c7');
+        root.style.setProperty('--color-2','#70e000');
+        root.style.setProperty('--color-3','#2a9d8f');
+        root.style.setProperty('--color-4','#145214');
+    }
+    toggleThemeModal();
+}
+
+// Players online
+function updatePlayersOnline(){
+    const count=Math.floor(Math.random()*500)+50;
+    document.getElementById('online-count').innerText = count;
+}
+setInterval(updatePlayersOnline,5000);
+updatePlayersOnline();
+
+// Render placeholder cards
+function generatePlaceholderIcon(name){
+    const canvas=document.createElement('canvas'); canvas.width=80; canvas.height=80;
+    const ctx=canvas.getContext('2d'); ctx.fillStyle='black'; ctx.fillRect(0,0,80,80);
+    ctx.fillStyle='white'; ctx.font='bold 40px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(name[0].toUpperCase(),40,40); return canvas.toDataURL();
+}
+function renderItems(containerId, items){
+    const container=document.getElementById(containerId);
+    container.innerHTML='';
+    items.forEach(item=>{
+        const card=document.createElement('div'); 
+        card.className=containerId.includes('apps') ? 'apps-card' : 'game-card';
+        const img=document.createElement('img'); img.src=generatePlaceholderIcon(item.name);
+        const btn=document.createElement('button'); btn.innerText=item.name;
+        btn.onclick=()=>openItem(item);
+        card.appendChild(img); card.appendChild(btn); container.appendChild(card);
+    });
+}
+
+
+
+
+// Example items
+const games = [//https://truffled.lol/gamefile/Pizza%20Tower.html
+    { name: 'Pizza Tower', url: 'https://truffled.lol/gamefile/Pizza%20Tower.html' },
+    { name: 'Fallout', url: 'https://truffled.lol/gamefile/falloutt.html' },
+    { name: 'Slow Roads', url: 'https://truffled.lol/games/slowroads/index.html' },
+    { name: 'Sonic Mania', url: 'https://truffled.lol/extra/main/index.html' },
+    { name: 'Sonic CD', url: 'https://truffled.lol/games/soniccd/soniccd.html' },
+    { name: 'Sonic 3', url: 'https://truffled.lol/games/sonic3/index.html' },
+    { name: 'Sonic 2', url: 'https://truffled.lol/games/sonic2/index.html' },
+    { name: 'Sonic 1', url: 'https://truffled.lol/games/sonic/index.html' },
+    { name: 'Dadish 3D', url: 'https://truffled.lol/gamefile/dadish3d.html' },
+    { name: 'Dadish 3', url: 'https://truffled.lol/gamefile/dadish3.html' },
+    { name: 'Dadish 2', url: 'https://truffled.lol/gamefile/dadish2.html' },
+    { name: 'Dadish', url: 'https://truffled.lol/gamefile/dadish.html' },
+    { name: 'Doom 2', url: 'https://truffled.lol/gamefile/doom2.html' },
+    { name: 'Cluster Truck', url: 'https://truffled.lol/games/cluster/index.html' },
+    { name: 'REPO', url: 'https://truffled.lol/games/repo/index.html' },
+    { name: 'Club Penguin', url: 'https://play.cplegacy.com/' },
+    { name: 'MPS Baby', url: 'https://ghgames.netlify.app/games/MPS_BABY.html' },
+    { name: 'MPS Sanic', url: 'https://ghgames.netlify.app/games/MPS_SANIC.html' },
+    { name: 'MPS Admin', url: 'https://ghgames.netlify.app/games/MPS_ADMIN.html' },
+    { name: 'Mind Invasion', url: 'https://ghgames.netlify.app/games/Mind-Invasion.html' },
+    { name: 'Coin Clicker', url: 'https://ghgames.netlify.app/games/CoinClicker.html' },
+    { name: 'The Architect', url: 'https://ghgames.netlify.app/games/The_Architect.html' },
+    { name: 'Retro Bowl', url: 'https://ghgames.netlify.app/games/Retro.html' },
+    { name: 'Tiny Fishing', url: 'https://ghgames.netlify.app/games(blckt)/annoyingfishgame.html' },
+    { name: 'Arena', url: 'https://ghgames.netlify.app/games(blckt)/arena.html' },
+    { name: 'Bad Time Sim', url: 'https://ghgames.netlify.app/games(blckt)/badtimesim.html' },
+    { name: 'Baldi\'s Basics', url: 'https://ghgames.netlify.app/games(blckt)/bald.html' },
+    { name: 'Bank Robbery 2', url: 'https://ghgames.netlify.app/games(blckt)/bankrobbery2.html' },
+    { name: 'Basket Catch', url: 'https://ghgames.netlify.app/games/Basket-catch-brython.html' },
+    { name: 'Bitlife', url: 'https://ghgames.netlify.app/games(blckt)/bitlife.html' },
+    { name: 'Celeste', url: 'https://ghgames.netlify.app/games(blckt)/celeste.html' },
+    { name: 'Chess AI', url: 'https://ghgames.netlify.app/games/ChessAI.html' },
+    { name: 'Click the Box', url: 'https://ghgames.netlify.app/games/clickthebox.html' },
+    { name: 'Cluster Rush', url: 'https://ghgames.netlify.app/games(blckt)/clusterrush.html' },
+    { name: 'Cookie Clicker (Local)', url: 'https://ghgames.netlify.app/games(blckt)/cookie.html' },
+    { name: 'Observe a Cube', url: 'https://ghgames.netlify.app/games(blckt)/coolbeans.html' },
+    { name: 'Crossy Roads', url: 'https://ghgames.netlify.app/games(blckt)/crossyroad.html' },
+    { name: 'CSGO Clicker (Local)', url: 'https://ghgames.netlify.app/games(blckt)/csgoclicker.html' },
+    { name: 'Dead Rails', url: 'https://ghgames.netlify.app/games(blckt)/deadrails.html' },
+    { name: 'Death Run 3D', url: 'https://ghgames.netlify.app/games(blckt)/deathrun3d.html' },
+    { name: 'Drift Hunters', url: 'https://ghgames.netlify.app/games(blckt)/drift.html' },
+    { name: 'Microsoft Edge Surf', url: 'https://ghgames.netlify.app/games(blckt)/edgesurf.html' },
+    { name: 'Fancy Pants Adventure', url: 'https://ghgames.netlify.app/games(blckt)/fancyp.html' },
+    { name: 'Fifa 2007', url: 'https://ghgames.netlify.app/games(blckt)/fifa2007.html' },
+    { name: 'FNAF Shooter', url: 'https://ghgames.netlify.app/games(blckt)/fnafshooter.html' },
+    { name: 'Fruit Ninja (Local)', url: 'https://ghgames.netlify.app/games(blckt)/fruit.html' },
+    { name: 'Funny Shooter (Local)', url: 'https://ghgames.netlify.app/games(blckt)/funnyshooter.html' },
+    { name: 'Gacha Life', url: 'https://ghgames.netlify.app/games(blckt)/gachalife.html' },
+    { name: 'Geometry Dash', url: 'https://ghgames.netlify.app/games(blckt)/geodash.html' },
+    { name: 'Geometry Dash Subzero', url: 'https://ghgames.netlify.app/games(blckt)/geodashsubzero.html' },
+    { name: 'Granny', url: 'https://ghgames.netlify.app/games(blckt)/granny.html' },
+    { name: 'Granny 2', url: 'https://ghgames.netlify.app/games(blckt)/granny2.html' },
+    { name: 'Secrets of Hallowland', url: 'https://ghgames.netlify.app/games(blckt)/hallow.html' },
+    { name: 'Line Rider', url: 'https://ghgames.netlify.app/games(blckt)/linerider.html' },
+    { name: 'Mario Combat', url: 'https://ghgames.netlify.app/games(blckt)/marioboom.html' },
+    { name: 'Mario Kart 64', url: 'https://ghgames.netlify.app/games(blckt)/mariokart.html' },
+    { name: 'Minecraft 1.5.2 (Local)', url: 'https://ghgames.netlify.app/games(blckt)/mc.html' },
+    { name: 'Minecraft 1.8', url: 'https://ghgames.netlify.app/games/Minecraft.html' },
+    { name: 'Minecraft 1.12', url: 'https://ghgames.netlify.app/games/1-2.html' },
+    { name: 'Minecraft Classic', url: 'https://ghgames.netlify.app/games(blckt)/mc2.html' },
+    { name: 'Metroid Fusion', url: 'https://ghgames.netlify.app/games(blckt)/metro.html' },
+    { name: 'Mii Creator', url: 'https://ghgames.netlify.app/games(blckt)/miicreator.html' },
+    { name: 'Money Rush', url: 'https://ghgames.netlify.app/games(blckt)/moneytalkss.html' },
+    { name: 'Moto X3M (Local)', url: 'https://ghgames.netlify.app/games(blckt)/motorx3m.html' },
+    { name: 'Only Up', url: 'https://ghgames.netlify.app/games(blckt)/onlyup.html' },
+    { name: 'OvO', url: 'https://ghgames.netlify.app/games(blckt)/ovo.html' },
+    { name: 'Crazy Cattle 3D', url: 'https://ghgames.netlify.app/games(blckt)/peakgame.html' },
+    { name: 'Pokemon Unbound', url: 'https://ghgames.netlify.app/games(blckt)/pokebound.html' },
+    { name: 'Pokemon Fire Red', url: 'https://ghgames.netlify.app/games(blckt)/pokefirered.html' },
+    { name: 'Pokemon Leaf Green', url: 'https://ghgames.netlify.app/games(blckt)/pokegreen.html' },
+    { name: 'Pokemon Emerald', url: 'https://ghgames.netlify.app/games(blckt)/pokemerald.html' },
+    { name: 'Pokemon Rouge', url: 'https://ghgames.netlify.app/games(blckt)/pokerogue.html' },
+    { name: 'Pokemon Stadium', url: 'https://ghgames.netlify.app/games(blckt)/pokestadium.html' },
+    { name: 'President Simulator', url: 'https://ghgames.netlify.app/games(blckt)/pressim.html' },
+    { name: 'Riddle School', url: 'https://ghgames.netlify.app/games(blckt)/riddle1.html' },
+    { name: 'Riddle School 2', url: 'https://ghgames.netlify.app/games(blckt)/riddle2.html' },
+    { name: 'Roblox', url: 'https://ghgames.netlify.app/games(blckt)/roblox.html' },
+    { name: 'Rooftop Snipers 2', url: 'https://ghgames.netlify.app/games(blckt)/roof2.html' },
+    { name: 'Ships 3D', url: 'https://ghgames.netlify.app/games/Ships3d.html' },
+    { name: 'Slice Masters', url: 'https://ghgames.netlify.app/games/slice-masters.html' },
+    { name: 'Slope', url: 'https://ghgames.netlify.app/games/slope.html' },
+    { name: 'Slope 2', url: 'https://ghgames.netlify.app/games(blckt)/slope2.html' },
+    { name: 'Super Mario Bros 3', url: 'https://ghgames.netlify.app/games(blckt)/smb3.html' },
+    { name: 'Super Mario Construct', url: 'https://ghgames.netlify.app/games(blckt)/smc.html' },
+    { name: 'Soccer Random', url: 'https://ghgames.netlify.app/games(blckt)/soccer.html' },
+    { name: 'Subway Surfers', url: 'https://ghgames.netlify.app/games(blckt)/subway.html' },
+    { name: 'Super Smash Bros 64', url: 'https://ghgames.netlify.app/games(blckt)/supersmash.html' },
+    { name: 'Tap Goal', url: 'https://ghgames.netlify.app/games(blckt)/taptap.html' },
+    { name: 'Vex 7', url: 'https://ghgames.netlify.app/games(blckt)/vex7.html' },
+    { name: 'Volley Random', url: 'https://ghgames.netlify.app/games(blckt)/volley.html' },
+    { name: 'Soccer Skills World Cup', url: 'https://ghgames.netlify.app/games(blckt)/world.html' },
+    { name: 'Memory Game', url: 'https://ghgames.netlify.app/games/ShortTermMemory.html' },
+    { name: 'Pong', url: 'https://ghgames.netlify.app/games/Pong.html' },
+    { name: 'Audio Game', url: 'https://ghgames.netlify.app/games/FindTheParty.html' },
+    { name: 'Buildnow.gg', url: 'https://buildnow-gg.io/buildnow-gg.embed' },
+    { name: 'Eaglercraft', url: 'https://eaglercraft.com/play/?version=1.12.2' },
+    { name: 'Bloons Player Pack 1', url: 'https://selenite.cc/resources/semag/bloonspp1/index.html' },
+    { name: 'Bloons Player Pack 2', url: 'https://selenite.cc/resources/semag/bloonspp2/index.html' },
+    { name: 'Bloons Player Pack 3', url: 'https://selenite.cc/resources/semag/bloonspp3/index.html' },
+    { name: 'Bloons Player Pack 4', url: 'https://selenite.cc/resources/semag/bloonspp4/index.html' },
+    { name: 'Bloons Player Pack 5', url: 'https://selenite.cc/resources/semag/bloonspp5/index.html' },
+    { name: 'Blood Tournament', url: 'https://selenite.cc/resources/semag/bloodtournament/index.html' },
+    { name: 'Buck Shot Roulette', url: 'https://selenite.cc/resources/semag/buckshot-roulette/index.html' },
+    { name: 'Age of War', url: 'https://selenite.cc/resources/semag/ageofwar/index.html' },
+    { name: 'Age of War 2', url: 'https://selenite.cc/resources/semag/aow2/index.html' },
+    { name: 'Achievement Unlocked', url: 'https://selenite.cc/resources/semag/achieveunlocked/index.html' },
+    { name: 'Achievement Unlocked 2', url: 'https://selenite.cc/resources/semag/achieveunlocked2/index.html' },
+    { name: 'Glass City', url: 'https://1kh0.github.io/projects/glass-city/index.html' },
+    { name: 'Portal (Flash)', url: 'https://1kh0.github.io/projects/portalflash/index.html' },
+    { name: 'Anti-Matter Dimentions', url: 'https://selenite.cc/resources/semag/antimatterdimensions/index.html' },
+    { name: 'Bit Life', url: 'https://selenite.cc/resources/semag/bitlife/index.html' },
+    { name: 'Animal Crossing: Wild World', url: 'https://selenite.cc/resources/semag/animalcrossingwildworld/index.html' },
+    { name: 'American Racing', url: 'https://selenite.cc/resources/semag/americanracing1/index.html' },
+    { name: '1 on 1 Soccer', url: 'https://selenite.cc/resources/semag/1on1soccer/index.html' },
+    { name: 'Baloon Run', url: 'https://selenite.cc/resources/semag/bal/index.html' },
+    { name: '2D Rocket League', url: 'https://selenite.cc/resources/semag/2drocketleague/index.html' },
+    { name: 'Funny Shooter', url: 'https://selenite.cc/resources/semag/funnyshooter/index.html' },
+    { name: 'Baldi Basics Plus', url: 'https://selenite.cc/resources/semag/baldi-plus/index.html' },
+    { name: 'Diablo', url: 'https://d07riv.github.io/diabloweb/' },
+    { name: 'Kick that Buddy', url: 'https://selenite.cc/resources/semag/kickthatbuddy/index.html' },
+    { name: 'Hollow Knight', url: 'https://selenite.cc/resources/semag/hollowknight/index.html' },
+    { name: 'Undertale', url: 'https://selenite.cc/resources/semag/undertale/index.html' },
+    { name: 'GTA 1', url: 'https://selenite.cc/resources/semag/gta1/index.html' },
+    { name: 'GTA 2', url: 'https://selenite.cc/resources/semag/gta2/index.html' },
+    { name: 'Jelly Drift', url: 'https://selenite.cc/resources/semag/jelly-drift/index.html' },
+    { name: 'Friday Night Funkin', url: 'https://selenite.cc/resources/semag/fridaynightfunkin/index.html' },
+    { name: 'Ultrakill', url: 'https://selenite.cc/resources/semag/ultrakill/index.html' },
+    { name: 'FNAF 4', url: 'https://selenite.cc/resources/semag/fnaf4/index.html' },
+    { name: 'FNAF 3', url: 'https://selenite.cc/resources/semag/fnaf3/index.html' },
+    { name: 'FNAF 2', url: 'https://selenite.cc/resources/semag/fnaf2/index.html' },
+    { name: 'FNAF', url: 'https://selenite.cc/resources/semag/fnaf/index.html' },
+    { name: 'Doom', url: 'https://selenite.cc/resources/semag/doom/index.html' },
+    { name: 'Halflife', url: 'https://selenite.cc/resources/semag/halflife/index.html' },
+    { name: 'Cuphead', url: 'https://selenite.cc/resources/semag/cuphead/index.html' },
+  { name: '1V1.LOL', url: 'https://selenite.cc/resources/semag/1v1lol/index.html#' },
+  { name: '1V1space', url: 'https://html-games-v2-ten.vercel.app/1v1space/index.html' },
+  { name: '2048', url: 'https://html-games-v2-ten.vercel.app/2048/index.html' },
+  { name: 'Among Us', url: 'https://html-games-v2-ten.vercel.app/among-us/index.html' },
+  { name: 'Alien Invaders.io', url: 'https://html-games-v2-ten.vercel.app/alien-invaders-io/index.html' },
+  { name: 'Angry Birds', url: 'https://html-games-v2-ten.vercel.app/angry-birds/index.html' },
+  { name: 'Anti Terrorist Rush', url: 'https://html-games-v2-ten.vercel.app/anti-terrorist-rush/index.html' },
+  { name: 'Arcade Wizard', url: 'https://html-games-v2-ten.vercel.app/arcade-wizard/index.html' },
+  { name: 'Asciispace', url: 'https://html-games-v2-ten.vercel.app/asciispace/index.html' },
+  { name: 'Asteroids', url: 'https://html-games-v2-ten.vercel.app/asteroids/index.html' },
+  { name: 'Astray', url: 'https://html-games-v2-ten.vercel.app/astray/index.html' },
+  { name: 'Awesome Tanks 2', url: 'https://html-games-v2-ten.vercel.app/awesome-tanks-2/index.html' },
+  { name: 'Backcountry', url: 'https://html-games-v2-ten.vercel.app/backcountry/index.html' },
+  { name: 'Backflip Dive 3D', url: 'https://html-games-v2-ten.vercel.app/backflip-dive-3d/index.html' },
+  { name: 'Backrooms', url: 'https://html-games-v2-ten.vercel.app/backrooms/index.html' },
+  { name: 'Bad Ice Cream', url: 'https://html-games-v2-ten.vercel.app/bad-ice-cream/index.html' },
+  { name: 'Bad Ice Cream 2', url: 'https://html-games-v2-ten.vercel.app/bad-ice-cream-2/index.html' },
+  { name: 'Bad Ice Cream 3', url: 'https://html-games-v2-ten.vercel.app/bad-ice-cream-3/index.html' },
+  { name: 'Baldis Basics', url: 'https://selenite.cc/resources/semag/baldis-basics/index.html' },
+  { name: 'BasketBros.io', url: 'https://html-games-v2-ten.vercel.app/basket-bros-io/index.html' },
+  { name: 'Basketball Legends 2020', url: 'https://html-games-v2-ten.vercel.app/basketball-legends-2020/index.html' },
+  { name: 'Basketball Stars', url: 'https://html-games-v2-ten.vercel.app/basketball-stars/index.html' },
+  { name: 'Basketball.io', url: 'https://html-games-v2-ten.vercel.app/basketball-io/index.html' },
+  { name: 'Battle For Gondor', url: 'https://html-games-v2-ten.vercel.app/battleforgondor/index.html' },
+  { name: 'Bigred Button', url: 'https://html-games-v2-ten.vercel.app/bigredbutton/index.html' },
+  { name: 'Binding of isaac', url: 'https://html-games-v2-ten.vercel.app/binding-of-isaac/index.html' },
+  { name: 'Black hole Square', url: 'https://html-games-v2-ten.vercel.app/blackholesquare/index.html' },
+  { name: 'Black Knight', url: 'https://html-games-v2-ten.vercel.app/blackknight/index.html' },
+  { name: 'Blocky Snakes', url: 'https://html-games-v2-ten.vercel.app/blocky-snakes/index.html' },
+  { name: 'Bottle Flip 3D', url: 'https://nate-games.com/0/g/bf3d/game/' },
+  { name: 'Bloons Tower Defence 1', url: 'https://selenite.cc/resources/semag/btd/index.html' },
+  { name: 'Bloons Tower Defence 2', url: 'https://selenite.cc/resources/semag/btd2/index.html' },
+  { name: 'Bloons Tower Defence 3', url: 'https://selenite.cc/resources/semag/btd3/index.html' },
+  { name: 'Bloons Tower Defence 4', url: 'https://selenite.cc/resources/semag/btd4/index.html' },
+  { name: 'Bloons Tower Defence 5', url: 'https://selenite.cc/resources/semag/btd5/index.html' },
+  { name: 'Bloons Tower Defence 6', url: 'https://selenite.cc/resources/semag/btd6/index.html' },
+  { name: 'Breakout', url: 'https://html-games-v2-ten.vercel.app/breakout/index.html' },
+  { name: 'Burning Man 2', url: 'https://html-games-v2-ten.vercel.app/burning-man-2/index.html' },
+  { name: 'Call of Duty', url: 'https://nzp.gay/' },
+  { name: 'Canyon Defence', url: 'https://html-games-v2-ten.vercel.app/canyondefense/index.html' },
+  { name: 'Car simulator', url: 'https://html-games-v2-ten.vercel.app/cars-simulator/index.html' },
+  { name: 'Champion archer', url: 'https://html-games-v2-ten.vercel.app/championarcher/index.html' },
+  { name: 'Chess', url: 'https://html-games-v2-ten.vercel.app/chess/index.html' },
+  { name: 'Chrome Dino', url: 'https://html-games-v2-ten.vercel.app/chrome-dino/index.html' },
+  { name: 'Cookie Clicker', url: 'https://orteil.dashnet.org/cookieclicker/' },
+  { name: 'CSGO Clicker', url: 'https://html-games-v2-ten.vercel.app/csgo-clicker/index.html' },
+  { name: 'Counter Strike', url: 'https://game.play-cs.com/' },  
+  { name: 'Crossyroad', url: 'https://html-games-v2-ten.vercel.app/crossyroad/index.html' },
+  { name: 'Cut the Rope', url: 'https://html-games-v2-ten.vercel.app/cuttherope/index.html' },
+  { name: 'Doge Mining Simulator', url: 'https://html-games-v2-ten.vercel.app/doge-mining-simulator/index.html' },
+  { name: 'Doodle Jump', url: 'https://html-games-v2-ten.vercel.app/doodle-jump/index.html' },
+  { name: 'Ducklife', url: 'https://html-games-v2-ten.vercel.app/ducklife/index.html' },
+  { name: 'Edge Surf', url: 'https://html-games-v2-ten.vercel.app/edge-surf/index.html' },
+  { name: 'Emulator JS', url: 'https://html-games-v2-ten.vercel.app/emulator-js/index.html' },
+  { name: 'Factoryballs', url: 'https://html-games-v2-ten.vercel.app/factoryballs/index.html' },
+  { name: 'Fall Guys', url: 'https://nate-games.com/0/g/fallguys/game/' },  
+  { name: 'Flappy Bird', url: 'https://html-games-v2-ten.vercel.app/flappy-bird/index.html' },
+  { name: 'Friday Night Funkin', url: 'https://html-games-v2-ten.vercel.app/fridaynightfunkin/index.html' },
+  { name: 'Fruit Ninja', url: 'https://html-games-v2-ten.vercel.app/fruitninja/index.html' },
+  { name: 'FullScreenMario', url: 'https://html-games-v2-ten.vercel.app/FullScreenMario/Source/index.htm' },
+  { name: 'Geometry Dash', url: 'https://html-games-v2-ten.vercel.app/geometrydash/index.html' },
+  { name: 'Getting Over It', url: 'https://nate-games.com/0/g/gettingoverit/game/' },  
+  { name: 'Google Snake', url: 'https://html-games-v2-ten.vercel.app/google-snake/index.html' },
+  { name: 'Google Solitaire', url: 'https://html-games-v2-ten.vercel.app/google-solitaire/index.html.html' },
+  { name: 'Happy Wheels', url: 'https://html-games-v2-ten.vercel.app/happy-wheels/index.html' },
+  { name: 'Hextris', url: 'https://html-games-v2-ten.vercel.app/hextris/index.html' },
+  { name: 'Impossible Quiz', url: 'https://html-games-v2-ten.vercel.app/impossiblequiz/index.html' },
+  { name: 'Iscribble.io', url: 'https://html-games-v2-ten.vercel.app/iscribble-io/index.html' },
+  { name: 'Justfall.lol', url: 'https://html-games-v2-ten.vercel.app/justfall/index.html' },
+  { name: 'Kartfight.io', url: 'https://html-games-v2-ten.vercel.app/kart-fight-io/index.html' },
+  { name: 'Kitchen Gun Game', url: 'https://html-games-v2-ten.vercel.app/kitchen-gun-game/index.html' },
+  { name: 'Krunker', url: 'https://html-games-v2-ten.vercel.app/krunker/index.html' },
+  { name: 'Learn To Fly', url: 'https://html-games-v2-ten.vercel.app/learntofly/index.html' },
+  { name: 'Madalin Stunt Cars 2', url: 'https://html-games-v2-ten.vercel.app/madalin-stunt-cars-2/index.html'},
+  { name: 'Make it meme', url: 'https://html-games-v2-ten.vercel.app/makeitmeme/index.html' },
+  { name: 'Minecraft 1.5.2', url: 'https://html-games-v2-ten.vercel.app/mc1.5.2/index.html' },
+  { name: 'Meat Boy', url: 'https://html-games-v2-ten.vercel.app/meat-boy/index.html' },
+  { name: 'Minesweeper', url: 'https://html-games-v2-ten.vercel.app/minesweeper/index.html' },
+  { name: 'Moto X3M', url: 'https://html-games-v2-ten.vercel.app/motox3m/index.html' },
+  { name: 'Moto X3M2', url: 'https://html-games-v2-ten.vercel.app/motox3m2/index.html' },
+  { name: 'My Friend Pedro', url: 'https://html-games-v2-ten.vercel.app/my-friend-pedro/index.html' },
+  { name: 'Osu!', url: 'https://selenite.cc/resources/semag/osu/index.html' },
+  { name: 'Pacman', url: 'https://html-games-v2-ten.vercel.app/pacman/index.html' },
+  { name: 'Retro Bowl', url: 'https://html-games-v2-ten.vercel.app/retro-bowl/index.html' },
+  { name: 'POLLYTRACK', url: 'https://selenite.cc/resources/semag/polytrack/index.html' },
+  { name: 'Slither', url: 'https://html-games-v2-ten.vercel.app/slither/index.html' },
+  { name: 'Slope', url: 'https://html-games-v2-ten.vercel.app/slope/index.html' },
+  { name: 'Solitaire', url: 'https://html-games-v2-ten.vercel.app/solitaire/index.html' },
+  { name: 'Sm64', url: 'https://html-games-v2-ten.vercel.app/sm64/index.html' },
+  { name: 'Sonic The Hedgehog', url: 'https://html-games-v2-ten.vercel.app/sonic-the-hedgehog/src/index.html'},
+  { name: 'Soundboard', url: 'https://html-games-v2-ten.vercel.app/soundboard/index.html' },
+  { name: 'Stickman', url: 'https://html-games-v2-ten.vercel.app/stickman/index.html' },
+  { name: 'Super Mario Maker Online', url: 'https://html-games-v2-ten.vercel.app/super-mario-maker-online/index.html' },
+  { name: 'Superhero.io', url: 'https://html-games-v2-ten.vercel.app/superhero-io/index.html' },
+  { name: 'Superhot', url: 'https://html-games-v2-ten.vercel.app/superhot/index.html' },
+  { name: 'Temple Run 2', url: 'https://html-games-v2-ten.vercel.app/temple-run-2/index.html' },
+  { name: 'Tetris', url: 'https://html-games-v2-ten.vercel.app/tetris/index.html' },
+  { name: 'Terraria', url: 'https://nate-games.com/0/g/Terraria/game/' },
+  { name: 'The Impossible Quiz', url: 'https://html-games-v2-ten.vercel.app/the-impossible-quiz/index.html' },
+  { name: 'The Impossible Quiz 2', url: 'https://html-games-v2-ten.vercel.app/the-impossible-quiz-2/index.html' },
+  { name: 'The Heist', url: 'https://html-games-v2-ten.vercel.app/theheist/index.html' },
+  { name: 'Time Shooter 3', url: 'https://html-games-v2-ten.vercel.app/time-shooter-3/index.html' },
+  { name: 'Townscaper', url: 'https://html-games-v2-ten.vercel.app/townscaper/index.html' },
+  { name: 'Underrun', url: 'https://html-games-v2-ten.vercel.app/underrun/index.html' },
+  { name: 'Wordle', url: 'https://html-games-v2-ten.vercel.app/wordle/index.html' },
+  { name: 'World`s Hardest Game', url: 'https://nate-games.com/0/g/whg/game/' },
+  { name: 'World`s Hardest Game 2', url: 'https://nate-games.com/0/g/whg2/game/' },
+  { name: 'World`s Hardest Game 3', url: 'https://nate-games.com/0/g/whg3/game/' },
+  { name: 'You are Bezos', url: 'https://html-games-v2-ten.vercel.app/you-are-bezos/index.html' },
+  { name: 'Zig Zag', url: 'https://html-games-v2-ten.vercel.app/zig-zag/index.html' },
+  { name: 'Zombie Apocalypse', url: 'https://html-games-v2-ten.vercel.app/zombocalypse/index.html' },
+  { name: 'Zombs Royale', url: 'https://html-games-v2-ten.vercel.app/zombs-royale/index.html' },
+  { name: 'Mr Racer', url: 'https://trafficjam3d.github.io/mr-racer-car-racing/' },
+  { name: 'Get away Shooter', url: 'https://thirteenfo.netlify.app/games/getawayshoot/index.html' },
+  { name: 'Shell Shockers', url: 'https://shellshock.io/' }]; 
+  games.sort((a, b) => a.name.localeCompare(b.name)); 
+const apps=[{ name:'This let you use anything.', url:'https://www.quizlet.gq' }
+].sort((a,b)=>a.name.localeCompare(b.name));
+const flashGames=[{ name:'Flash Games', url:'https://flash-games.io/'},
+{ name:'Flash Museum', url:'https://flashmuseum.org/' }
+];
+const unblockers=[{name:'ArtClass',url:'https://artclass-pink.vercel.app/'},
+{name:'Rammerhead',url:'https://quizlet.gq/'}
+];
+const newsItems = [
+    { title: "Rebranding", description: "Changed kas-games to quantum-unb"},
+];
+
+function renderNews(containerId, items){
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'news-card';
+        const title = document.createElement('h3'); title.innerText = item.title;
+        const desc = document.createElement('p'); desc.innerText = item.description;
+        const btn = document.createElement('button'); btn.innerText = 'Read More';
+        btn.onclick = () => window.open(item.url, '_blank');
+        card.appendChild(title);
+        card.appendChild(desc);
+        card.appendChild(btn);
+        container.appendChild(card);
+    });
+}
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("warning").forEach(el => el.remove());
+});
+
+
+
+// Render news on welcome screen
+renderNews('news-container', newsItems);
+
+renderItems('games-container',games);
+renderItems('apps-container',apps);
+renderItems('flash-container',flashGames);
+renderItems('unblockers-container',unblockers);
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("warning").forEach(el => el.remove());
+});
+
+</script>
+</body>
+</html>
