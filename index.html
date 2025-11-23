@@ -862,6 +862,11 @@ renderItems('games-container',games);
 renderItems('apps-container',apps);
 renderItems('flash-container',flashGames);
 renderItems('unblockers-container',unblockers);
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("warning").forEach(el => el.remove());
+});
+
 </script>
 </body>
 </html>
