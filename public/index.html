@@ -866,15 +866,14 @@ renderItems('games-container',games);
 renderItems('apps-container',apps);
 renderItems('flash-container',flashGames);
 renderItems('unblockers-container',unblockers);
-
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll("warning").forEach(el => el.remove());
 });
-<script>
+// Remove invalid <warning> tags (if any)
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".warning").forEach(el => el.remove());
+});
+
 // Track the last clicked link
 let lastClickedLink = null;
-
-// Listen for clicks on any link
 document.addEventListener("click", function(e) {
     const target = e.target.closest("a");
     if (target) {
@@ -883,20 +882,14 @@ document.addEventListener("click", function(e) {
     }
 });
 
-// Listen for Tab key
+// Listen for Tab key to open stored link in iframe (example)
 document.addEventListener("keydown", function(e) {
     if (e.key === "Tab" && lastClickedLink) {
-        e.preventDefault(); // prevent default tabbing
-        // Open the stored link in the iframe
-        const gameWindow = document.getElementById('game-window');
-        const gameFrame = document.getElementById('game-frame');
-        const gameTitle = document.getElementById('game-title');
-
-        gameTitle.innerText = lastClickedLink.split("/").pop(); // simple name from URL
-        gameFrame.src = lastClickedLink;
-        gameWindow.style.display = 'flex';
-
-        lastClickedLink = null; // reset
+        e.preventDefault();
+        document.getElementById('game-frame').src = lastClickedLink;
+        document.getElementById('game-title').innerText = "External Link";
+        document.getElementById('game-window').style.display = 'flex';
+        lastClickedLink = null;
     }
 });
 
