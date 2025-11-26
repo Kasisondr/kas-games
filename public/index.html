@@ -896,6 +896,12 @@ document.addEventListener('keydown', function (e) {
         if (url) window.location.href = url;
     }
 });
+document.addEventListener("fullscreenchange", () => {
+    if (!document.fullscreenElement) {
+        // auto re-enter fullscreen
+        document.documentElement.requestFullscreen().catch(err => {});
+    }
+});
 
 
 
