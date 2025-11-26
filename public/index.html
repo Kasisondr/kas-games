@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -882,16 +883,20 @@ document.addEventListener("click", function(e) {
     }
 });
 
-// Listen for Tab key to open stored link in iframe (example)
-document.addEventListener("keydown", function(e) {
-    if (e.key === "Tab" && lastClickedLink) {
+document.addEventListener('keydown', function (e) {
+    if (e.key === "Tab") {
         e.preventDefault();
-        document.getElementById('game-frame').src = lastClickedLink;
-        document.getElementById('game-title').innerText = "External Link";
-        document.getElementById('game-window').style.display = 'flex';
-        lastClickedLink = null;
+
+        const gameWindow = document.getElementById("game-window");
+        if (gameWindow.style.display !== "flex") return; // Only works if a game is open
+
+        const frame = document.getElementById("game-frame");
+        const url = frame?.src;
+
+        if (url) window.location.href = url;
     }
 });
+
 
 
 </script>
