@@ -896,6 +896,32 @@ document.addEventListener('keydown', function (e) {
         if (url) window.location.href = url;
     }
 });
+// Get your game canvas element
+const canvas = document.querySelector('canvas');
+
+// Request pointer lock on click
+canvas.addEventListener('click', () => {
+    canvas.requestPointerLock();
+});
+
+// Listen for pointer lock changes
+document.addEventListener('pointerlockchange', () => {
+    if (document.pointerLockElement === canvas) {
+        console.log('Pointer locked!');
+        // Enable mouse input to rotate camera, etc.
+        document.addEventListener('mousemove', handleMouseMove);
+    } else {
+        console.log('Pointer unlocked.');
+        document.removeEventListener('mousemove', handleMouseMove);
+    }
+});
+
+// Example mouse movement handler
+function handleMouseMove(e) {
+    const { movementX, movementY } = e;
+    // Use movementX/movementY for camera rotation
+    console.log(movementX, movementY);
+}
 document.addEventListener("fullscreenchange", () => {
     if (!document.fullscreenElement) {
         // auto re-enter fullscreen
