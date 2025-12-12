@@ -10,7 +10,7 @@
 		this.upgrs = [];
 		this.autos = [];
 		this.goals = [];
-		this.time = new Date(now);	
+		this.time = new Date.now();	
 		this.fram = 0;
 		
 		this._menu = new Sprite();  this.addChild(this._menu);
