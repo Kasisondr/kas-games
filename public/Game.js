@@ -15,10 +15,10 @@
 		
 		this._menu = new Sprite();  this.addChild(this._menu);
 		this._scrs = [];  // screens
-		this.jumps = [1];  // steps into the future
+		this.jumps = [];  // steps into the future
 		this._si   = -1;
 		
-		setTimeout(function() {  fetch("//www.photopea.com/papi/event.php?id=web_Peasmaker");  },30000);
+		//setTimeout(function() {  fetch("//www.photopea.com/papi/event.php?id=web_Peasmaker");  },30000);
 		
 		var lbs = ["hi","um","join the","discord","for more",".gg/PJMpT3n8xK","ok?"];
 		for(var i=0; i<6; i++) {
