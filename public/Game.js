@@ -18,7 +18,7 @@
 		this.jumps = [];  // steps into the future
 		this._si   = -1;
 		
-		//setTimeout(function() {  fetch("//www.photopea.com/papi/event.php?id=web_Peasmaker");  },30000);
+		setTimeout(function() {  fetch("//www.photopea.com/papi/event.php?id=web_Peasmaker");  },30000);
 		
 		var lbs = ["hi","um","join the","discord","for more","so yeah",".gg/PJMpT3n8xK"];
 		for(var i=0; i<6; i++) {
