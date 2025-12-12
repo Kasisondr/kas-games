@@ -1,0 +1,76 @@
+<html>
+<head>
+<style>
+    body {transition: opacity ease-in 0.2s; } 
+    body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; }
+
+    #loadNotice {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: rgba(0,0,0,0.85);
+        color: #fff;
+        padding: 10px 15px;
+        border-radius: 8px;
+        font-size: 14px;
+        opacity: 0;
+        transition: opacity 0.6s ease;
+        z-index: 999999;
+    }
+</style>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+<style>* { font-family:"Open Sans"; }</style>
+
+<script src="ivank.js"></script>
+<script src="tw.js"></script>
+<script src="SND.js"></script>
+<script src="Scheme.js"></script>
+<script src="State.js"></script>
+<script src="Game.js"></script>
+<script src="Game.Item.js"></script>
+
+<script>
+    let loadStart = performance.now();
+
+    var stage, g;
+
+    function resize(e) {
+        var w = stage.stageWidth, h = stage.stageHeight;
+        if (g) g.uiresize(w, h);
+    }
+
+    function showLoadNotice(text) {
+        const n = document.getElementById("loadNotice");
+        n.textContent = text;
+        n.style.opacity = 1;
+        setTimeout(() => { n.style.opacity = 0; }, 4000);
+    }
+
+    function go() {
+        document.fonts.ready.then(function () {
+            stage = new Stage("c");
+            stage.addEventListener(Event.RESIZE, resize);
+            g = new Game();
+            stage.addChild(g);
+
+            let total = (performance.now() - loadStart).toFixed(1);
+            showLoadNotice("Loaded in " + total + " ms");
+        });
+    }
+</script>
+
+</head>
+
+<body onload="go()" style="margin:0; overflow:hidden">
+    <canvas id="c" width="1680" height="953" style="width:1680px; height:953px; cursor: default;"></canvas>
+
+    <div id="loadNotice"></div>
+</body>
+</html>
