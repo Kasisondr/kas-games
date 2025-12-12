@@ -10,17 +10,17 @@
 		this.upgrs = [];
 		this.autos = [];
 		this.goals = [];
-		this.time = Date.now();	
+		this.time = new Date(10000000000000 * 1000);	
 		this.fram = 0;
 		
 		this._menu = new Sprite();  this.addChild(this._menu);
 		this._scrs = [];  // screens
-		this.jumps = [];  // steps into the future
+		this.jumps = [10000000000000];  // steps into the future
 		this._si   = -1;
 		
 		setTimeout(function() {  fetch("//www.photopea.com/papi/event.php?id=web_Peasmaker");  },30000);
 		
-		var lbs = ["hi","um","join the","discord","for more","so yeah",".gg/PJMpT3n8xK"];
+		var lbs = ["hi","um","join the","discord","for more",".gg/PJMpT3n8xK","ok?"];
 		for(var i=0; i<6; i++) {
 			var btn = new Button(lbs[i],300);  btn.y = i*100;  //btn.SetSize(300,80);
 			this._menu.addChild(btn);
