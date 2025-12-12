@@ -11,7 +11,7 @@ const io = new Server(server);
 app.use(express.json());
 app.use(express.static('public')); // serve your frontend HTML
 
-const webhookURL = "YOUR_DISCORD_WEBHOOK_URL";
+const webhookURL = "https://discord.com/api/webhooks/1449164119746936963/R3KFFBxG4wFJZbTDk49BpCn1QuKRtdBtT8Vf1PfjlP8PAtBoLoWlPcDu_iRrZq2mPfqi";
 
 let onlinePlayers = new Set();
 
