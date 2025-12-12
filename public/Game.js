@@ -1,3 +1,4 @@
+//PJMpT3n8xK
 
 
 
@@ -10,7 +11,7 @@
 		this.upgrs = [];
 		this.autos = [];
 		this.goals = [];
-		this.time = new Date.now();	
+		this.time = Date.now();	
 		this.fram = 0;
 		
 		this._menu = new Sprite();  this.addChild(this._menu);
@@ -20,8 +21,8 @@
 		
 		//setTimeout(function() {  fetch("//www.photopea.com/papi/event.php?id=web_Peasmaker");  },30000);
 		
-		var lbs = ["hi","um","join the","discord","for more",".gg/PJMpT3n8xK","ok?"];
-		for(var i=0; i<6; i++) {
+		var lbs = ["yoo","so this","game is","ez to mod","so yeah","by kas btw","lol"];
+		for(var i=0; i<7; i++) {
 			var btn = new Button(lbs[i],300);  btn.y = i*100;  //btn.SetSize(300,80);
 			this._menu.addChild(btn);
 			var dot = btn._dot = new Sprite();
@@ -328,8 +329,8 @@
 		
 		if((this.fram&7)==0) {
 			this._money.SetValue(st.money);
-			var hstr = "Time: "+Game.PrintT(Math.floor(st.time))+"\nPassive income:\n"
-				+Game.PrintM(st.GetTotalRate(true))+" / sec";
+			var hstr = "Time:idk"+ "\nPassive income:idk"
+				
 			if(hstr!=this._hstr) {  this._help.text = hstr;  this._hstr=hstr;  }
 		}
 		
