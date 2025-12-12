@@ -20,7 +20,7 @@
 		
 		//setTimeout(function() {  fetch("//www.photopea.com/papi/event.php?id=web_Peasmaker");  },30000);
 		
-		var lbs = ["hi","um","join the","discord","or automation ig","so yeah",".gg/PJMpT3n8xK"];
+		var lbs = ["hi","um","join the","discord","for more","so yeah",".gg/PJMpT3n8xK"];
 		for(var i=0; i<6; i++) {
 			var btn = new Button(lbs[i],300);  btn.y = i*100;  //btn.SetSize(300,80);
 			this._menu.addChild(btn);
