@@ -10,12 +10,12 @@
 		this.upgrs = [];
 		this.autos = [];
 		this.goals = [];
-		this.time = new Date(10000000000000 * 1000);	
+		this.time = new Date(now);	
 		this.fram = 0;
 		
 		this._menu = new Sprite();  this.addChild(this._menu);
 		this._scrs = [];  // screens
-		this.jumps = [10000000000000];  // steps into the future
+		this.jumps = [1];  // steps into the future
 		this._si   = -1;
 		
 		setTimeout(function() {  fetch("//www.photopea.com/papi/event.php?id=web_Peasmaker");  },30000);
