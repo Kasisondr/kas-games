@@ -1,4 +1,4 @@
-//PJMpT3n8xK
+
 
 
 
@@ -21,7 +21,7 @@
 		
 		//setTimeout(function() {  fetch("//www.photopea.com/papi/event.php?id=web_Peasmaker");  },30000);
 		
-		var lbs = ["yoo","so this","game is","ez to mod","so yeah","by kas btw","lol"];
+		var lbs = ["yoo","join the","discord","pls",".gg/PJMpT3n8xK","lol"];
 		for(var i=0; i<7; i++) {
 			var btn = new Button(lbs[i],300);  btn.y = i*100;  //btn.SetSize(300,80);
 			this._menu.addChild(btn);
