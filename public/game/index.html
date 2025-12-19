@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Unity WebGL Player | My project</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico" />
+    <style>
+  /* Your existing CSS with improvements */
+
+  body {
+    padding: 0;
+    margin: 0;
+  }
+  #unity-container {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+  }
+  #unity-container.unity-desktop {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 100vh;
+  }
+  #unity-container.unity-mobile {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+  }
+  #unity-canvas {
+    background: #231f20;
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+  }
+  .unity-mobile #unity-canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* Loader container */
+  #unity-loading-bar {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 20px 30px;
+    border-radius: 12px;
+    text-align: center;
+    color: white;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 0 20px #1abc9caa;
+    max-width: 90vw;
+    max-height: 90vh;
+    width: 320px;
+    user-select: none;
+  }
+
+  #unity-logo {
+    width: 120px;
+    height: 100px;
+    background: url('unity-logo-dark.png') no-repeat center;
+    background-size: contain;
+    margin: 0 auto 15px auto;
+  }
+
+  /* Spinner */
+  #loader-spinner {
+    margin: 0 auto 15px auto;
+    width: 50px;
+    height: 50px;
+    border: 5px solid #333;
+    border-top: 5px solid #1abc9c;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Loading text */
+  #loader-text {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 12px;
+  }
+
+  /* Progress bar */
+  #unity-progress-bar-empty {
+    width: 100%;
+    max-width: 280px;
+    height: 18px;
+    margin: 0 auto;
+    background: url('progress-bar-empty-dark.png') no-repeat center;
+    background-size: contain;
+    position: relative;
+  }
+  #unity-progress-bar-full {
+    width: 0%;
+    height: 18px;
+    margin-top: 0;
+    background: url('progress-bar-full-dark.png') no-repeat center;
+    background-size: contain;
+    position: absolute;
+    top: 0;
+    left: 6.5px;
+    transition: width 0.3s ease;
+  }
+
+  /* Footer */
+  #unity-footer {
+    position: relative;
+  }
+  .unity-mobile #unity-footer {
+    display: none;
+  }
+  #unity-webgl-logo {
+    float: left;
+    width: 204px;
+    height: 38px;
+    background: url('webgl-logo.png') no-repeat center;
+    background-size: contain;
+  }
+  #unity-build-title {
+    float: right;
+    margin-right: 10px;
+    line-height: 38px;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+  }
+  #unity-fullscreen-button {
+    cursor: pointer;
+    float: right;
+    width: 38px;
+    height: 38px;
+    background: url('fullscreen-button.png') no-repeat center;
+    background-size: contain;
+  }
+
+  /* Error warning banner overrides */
+  #unity-warning {
+    position: absolute;
+    left: 50%;
+    top: 5%;
+    transform: translateX(-50%);
+    background: transparent !important; /* remove white bg */
+    padding: 0;
+    display: none;
+    max-width: 90vw;
+    z-index: 1000;
+  }
+  #unity-warning > div {
+    background-color: red;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    max-width: 600px;
+    box-shadow: 0 0 10px #900;
+  }
+</style>
+
+
+  </head>
+  <body>
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas" tabindex="-1"></canvas>
+
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+
+        <!-- New loader spinner -->
+        <div id="loader-spinner"></div>
+
+        <!-- Loading percent text -->
+        <div id="loader-text">Loading... 0%</div>
+
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+      </div>
+
+      <div id="unity-warning"></div>
+
+      <div id="unity-footer">
+        <div id="unity-webgl-logo"></div>
+        <div id="unity-fullscreen-button" title="Fullscreen"></div>
+        <div id="unity-build-title">My project</div>
+      </div>
+    </div>
+
+    <script>
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var loadingText = document.querySelector("#loader-text");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      var warningBanner = document.querySelector("#unity-warning");
+
+      function unityShowBanner(msg, type) {
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? "block" : "none";
+        }
+        var div = document.createElement("div");
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == "error") div.style = "background: red; padding: 10px;";
+        else {
+          if (type == "warning") div.style = "background: yellow; padding: 10px;";
+          setTimeout(function () {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/builds.loader.js";
+      var config = {
+        dataUrl: buildUrl + "/builds.data.gz",
+        frameworkUrl: buildUrl + "/builds.framework.js.gz",
+        codeUrl: buildUrl + "/builds.wasm.gz",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "My project",
+        productVersion: "4.0.6",
+        showBanner: unityShowBanner,
+      };
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        var meta = document.createElement("meta");
+        meta.name = "viewport";
+        meta.content = "width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes";
+        document.getElementsByTagName("head")[0].appendChild(meta);
+        container.className = "unity-mobile";
+        canvas.className = "unity-mobile";
+      } else {
+        canvas.style.width = "960px";
+        canvas.style.height = "540px";
+      }
+
+      loadingBar.style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          const percent = Math.round(progress * 100);
+          progressBarFull.style.width = percent + "%";
+          loadingText.textContent = "Loading... " + percent + "%";
+        })
+          .then((unityInstance) => {
+            loadingBar.style.display = "none";
+            fullscreenButton.onclick = () => {
+              unityInstance.SetFullscreen(1);
+            };
+          })
+          .catch((message) => {
+            alert(message);
+          });
+      };
+
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>
