@@ -431,6 +431,9 @@ button:active::before {
         <button onclick="likeGame()">👍 Like</button>
         <button onclick="dislikeGame()">👎 Dislike</button>
         <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
+        
+
+<button onclick="savePage()">Save Page</button>
         <button onclick="closeGame()">❌ Close</button>
     </div>
 </div>
@@ -520,7 +523,17 @@ function toggleFullscreen(){
     if(el.requestFullscreen) el.requestFullscreen();
     else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen();
 }
+function savePage() {
+  const html = document.documentElement.outerHTML;
 
+  const blob = new Blob([html], { type: "text/html" });
+
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "index.html";
+
+  a.click();
+}
 function likeGame(){ alert('Liked!'); }
 function dislikeGame(){ alert('Disliked!'); }
 
