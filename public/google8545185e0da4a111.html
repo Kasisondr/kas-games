@@ -1,1 +1,1957 @@
-google-site-verification: google8545185e0da4a111.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lume</title>
+  <link rel="icon" id="lume-favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='4'/><path d='M12 2v2'/><path d='M12 20v2'/><path d='m4.93 4.93 1.41 1.41'/><path d='m17.66 17.66 1.41 1.41'/><path d='M2 12h2'/><path d='M20 12h2'/><path d='m6.34 17.66-1.41 1.41'/><path d='m19.07 4.93-1.41 1.41'/></svg>" />
+
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            theme: {
+              bg: 'var(--bg)',
+              surface: 'var(--surface)',
+              'surface-hover': 'var(--surface-hover)',
+              'surface-active': 'var(--surface-active)',
+              border: 'var(--border)',
+              'border-subtle': 'var(--border-subtle)',
+              foreground: 'var(--fg)',
+              muted: 'var(--muted)',
+              accent: 'var(--accent)',
+              'accent-hover': 'var(--accent-hover)',
+              'accent-muted': 'var(--accent-muted)',
+              danger: 'var(--danger)',
+            }
+          },
+          boxShadow: {
+            'lume-sm': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+            'lume': '0 4px 20px -2px var(--shadow-color)',
+            'lume-lg': '0 10px 30px -4px var(--shadow-color)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- React 18 & ReactDOM -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel Standalone for In-browser JSX/TS compilation -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Theme Token Definitions -->
+  <style>
+    /* Base Themes Variables */
+    :root {
+      --bg: #090a0f;
+      --surface: #12141c;
+      --surface-hover: #191c27;
+      --surface-active: #202433;
+      --border: #222634;
+      --border-subtle: #171a24;
+      --fg: #f1f5f9;
+      --muted: #7c8ba1;
+      --accent: #38bdf8;
+      --accent-hover: #0ea5e9;
+      --accent-muted: rgba(56, 189, 248, 0.12);
+      --danger: #ef4444;
+      --shadow-color: rgba(0, 0, 0, 0.5);
+    }
+
+    [data-theme="midnight"] {
+      --bg: #0b0f19;
+      --surface: #111827;
+      --surface-hover: #1f2937;
+      --surface-active: #374151;
+      --border: #1f2937;
+      --border-subtle: #151d2c;
+      --fg: #f9fafb;
+      --muted: #9ca3af;
+      --accent: #60a5fa;
+      --accent-hover: #3b82f6;
+      --accent-muted: rgba(96, 165, 250, 0.12);
+      --shadow-color: rgba(0, 0, 0, 0.6);
+    }
+
+    [data-theme="monochrome"] {
+      --bg: #0d0d0d;
+      --surface: #171717;
+      --surface-hover: #262626;
+      --surface-active: #333333;
+      --border: #2e2e2e;
+      --border-subtle: #1c1c1c;
+      --fg: #fafafa;
+      --muted: #a3a3a3;
+      --accent: #e5e5e5;
+      --accent-hover: #ffffff;
+      --accent-muted: rgba(255, 255, 255, 0.12);
+      --shadow-color: rgba(0, 0, 0, 0.7);
+    }
+
+    [data-theme="aurora"] {
+      --bg: #081018;
+      --surface: #0e1c26;
+      --surface-hover: #152b3a;
+      --surface-active: #1d3a4d;
+      --border: #1c3647;
+      --border-subtle: #10212d;
+      --fg: #e2f4f8;
+      --muted: #77a1b5;
+      --accent: #2dd4bf;
+      --accent-hover: #14b8a6;
+      --accent-muted: rgba(45, 212, 191, 0.14);
+      --shadow-color: rgba(0, 15, 25, 0.6);
+    }
+
+    [data-theme="ember"] {
+      --bg: #140d0a;
+      --surface: #1d1410;
+      --surface-hover: #2b1f1a;
+      --surface-active: #3a2b24;
+      --border: #38251e;
+      --border-subtle: #241712;
+      --fg: #fbeee8;
+      --muted: #ab8d81;
+      --accent: #f97316;
+      --accent-hover: #ea580c;
+      --accent-muted: rgba(249, 115, 22, 0.15);
+      --shadow-color: rgba(20, 10, 5, 0.6);
+    }
+
+    [data-theme="rose"] {
+      --bg: #120b10;
+      --surface: #1b1219;
+      --surface-hover: #291b26;
+      --surface-active: #392534;
+      --border: #392233;
+      --border-subtle: #231320;
+      --fg: #faedf5;
+      --muted: #b089a5;
+      --accent: #fb7185;
+      --accent-hover: #f43f5e;
+      --accent-muted: rgba(251, 113, 133, 0.14);
+      --shadow-color: rgba(18, 11, 16, 0.6);
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-hover: #f1f5f9;
+      --surface-active: #e2e8f0;
+      --border: #e2e8f0;
+      --border-subtle: #edf2f7;
+      --fg: #0f172a;
+      --muted: #64748b;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-muted: rgba(37, 99, 235, 0.1);
+      --shadow-color: rgba(15, 23, 42, 0.08);
+    }
+
+    /* Core Document Settings */
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    input, textarea, [contenteditable="true"] {
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--muted);
+    }
+
+    /* Custom Cursor Styles */
+    .lume-cursor-dot {
+      pointer-events: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent);
+      border-radius: 50%;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: width 0.15s ease, height 0.15s ease, opacity 0.2s ease;
+      will-change: transform;
+    }
+
+    .lume-cursor-ring {
+      pointer-events: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 32px;
+      height: 32px;
+      border: 1.5px solid var(--accent);
+      border-radius: 50%;
+      z-index: 99998;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, transform 0.08s ease-out;
+      opacity: 0.55;
+      will-change: transform;
+    }
+
+    .cursor-hover .lume-cursor-ring {
+      width: 46px;
+      height: 46px;
+      border-color: var(--accent);
+      background-color: var(--accent-muted);
+      opacity: 0.9;
+    }
+
+    .cursor-hover .lume-cursor-dot {
+      width: 4px;
+      height: 4px;
+    }
+
+    /* Subtle Motion Safety */
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .lume-cursor-dot, .lume-cursor-ring {
+        display: none !important;
+      }
+    }
+
+    /* Interactive Focus Rings */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Lucide Icon System as Inline SVGs for self-contained elegance -->
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useMemo, useCallback } = React;
+
+    // --- ICON PRIMITIVES ---
+    const Icon = ({ path, size = 18, className = "" }) => (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={`inline-block shrink-0 ${className}`}
+      >
+        {path}
+      </svg>
+    );
+
+    const Icons = {
+      Gamepad: (props) => <Icon {...props} path={<><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect width="20" height="12" x="2" y="6" rx="6"/></>} />,
+      Grid: (props) => <Icon {...props} path={<><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></>} />,
+      User: (props) => <Icon {...props} path={<><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></>} />,
+      Settings: (props) => <Icon {...props} path={<><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></>} />,
+      ExternalLink: (props) => <Icon {...props} path={<><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></>} />,
+      Search: (props) => <Icon {...props} path={<><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></>} />,
+      Check: (props) => <Icon {...props} path={<><polyline points="20 6 9 17 4 12"/></>} />,
+      ChevronRight: (props) => <Icon {...props} path={<><polyline points="9 18 15 12 9 6"/></>} />,
+      Clock: (props) => <Icon {...props} path={<><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>} />,
+      ShieldAlert: (props) => <Icon {...props} path={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></>} />,
+      MousePointer: (props) => <Icon {...props} path={<><path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="m13 13 6 6"/></>} />,
+      Sparkles: (props) => <Icon {...props} path={<><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></>} />,
+      ArrowLeft: (props) => <Icon {...props} path={<><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></>} />,
+      Hammer: (props) => <Icon {...props} path={<><path d="m15 12-8.5 8.5c-.83.83-2.17.83-3 0 0 0 0 0 0 0a2.12 2.12 0 0 1 0-3L12 9"/><path d="M17.64 15 22 10.64"/><path d="m20.91 3.26-6.36 6.36"/><path d="m16.67 7.5 4.24-4.24"/></>} />,
+      Upload: (props) => <Icon {...props} path={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></>} />,
+      Play: (props) => <Icon {...props} path={<><polygon points="5 3 19 12 5 21 5 3"/></>} />,
+      Star: (props) => <Icon {...props} path={<><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></>} />,
+      Maximize2: (props) => <Icon {...props} path={<><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></>} />,
+      X: (props) => <Icon {...props} path={<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>} />
+    };
+
+    // --- CURATED DATA & CONFIG ---
+    const TIMEZONES = [
+      { label: "UK / London (Default)", value: "Europe/London" },
+      { label: "New York (EST/EDT)", value: "America/New_York" },
+      { label: "Los Angeles (PST/PDT)", value: "America/Los_Angeles" },
+      { label: "Chicago (CST/CDT)", value: "America/Chicago" },
+      { label: "Paris / Berlin (CET)", value: "Europe/Paris" },
+      { label: "Tokyo (JST)", value: "Asia/Tokyo" },
+      { label: "Sydney (AEST)", value: "Australia/Sydney" },
+      { label: "Dubai (GST)", value: "Asia/Dubai" },
+      { label: "Singapore (SGT)", value: "Asia/Singapore" },
+      { label: "Universal UTC", value: "UTC" }
+    ];
+
+    const THEMES = [
+      { id: "midnight", name: "Midnight", preview: "#60a5fa", bg: "#0b0f19" },
+      { id: "aurora", name: "Aurora", preview: "#2dd4bf", bg: "#081018" },
+      { id: "ember", name: "Ember", preview: "#f97316", bg: "#140d0a" },
+      { id: "rose", name: "Rose", preview: "#fb7185", bg: "#120b10" },
+      { id: "monochrome", name: "Monochrome", preview: "#fafafa", bg: "#0d0d0d" },
+      { id: "light", name: "Pure Minimal (Light)", preview: "#2563eb", bg: "#f8fafc" }
+    ];
+
+    const TAB_PRESETS = [
+      { id: "lume", name: "Lume (Default)", title: "Lume", icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='4'/><path d='M12 2v2'/><path d='M12 20v2'/></svg>" },
+      { id: "blank", name: "Blank Document", title: "about:blank", icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'><rect width='18' height='18' x='3' y='3' rx='2'/></svg>" },
+      { id: "google", name: "Google Search", title: "Google", icon: "https://www.google.com/favicon.ico" },
+      { id: "calculator", name: "Calculator", title: "Calculator", icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2'><rect width='16' height='20' x='4' y='2' rx='2'/><line x1="8" x2="16" y1="6" y2="6"/></svg>" },
+      { id: "classroom", name: "Google Classroom", title: "Classes", icon: "https://ssl.gstatic.com/classroom/favicon.png" }
+    ];
+
+    // Clean, extensible Games Schema. Built-in playable canvas games for immediate delight.
+    const INITIAL_GAMES = [
+      {
+        id: "lume-2048",
+        title: "2048 Minimalist",
+        description: "Join the numbers to get to the 2048 tile with smooth haptic keyboard controls.",
+        thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80",
+        category: "Puzzle",
+        type: "builtin-2048",
+        featured: true,
+        tags: ["Logic", "Numbers", "Classic"]
+      },
+      {
+        id: "neon-snake",
+        title: "Vector Snake",
+        description: "Tactile retro snake redesigned with clean velocity, physics, and particle trails.",
+        thumbnail: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&auto=format&fit=crop&q=80",
+        category: "Arcade",
+        type: "builtin-snake",
+        featured: true,
+        tags: ["Retro", "Reflex", "Speed"]
+      },
+      {
+        id: "pong-zen",
+        title: "Zen Pong",
+        description: "A peaceful, responsive paddle battle against a predictive adaptive AI.",
+        thumbnail: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=600&auto=format&fit=crop&q=80",
+        category: "Arcade",
+        type: "builtin-pong",
+        featured: false,
+        tags: ["Paddle", "2D", "Skill"]
+      },
+      {
+        id: "cosmic-dodger",
+        title: "Void Dodger",
+        description: "Weave through a reactive field of falling meteors in high gravity.",
+        thumbnail: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=600&auto=format&fit=crop&q=80",
+        category: "Action",
+        type: "builtin-dodger",
+        featured: true,
+        tags: ["Endless", "Evasion"]
+      }
+    ];
+
+    // --- REUSABLE STORAGE UTILITIES ---
+    const STORAGE_KEY = "lume_user_prefs_v1";
+
+    const getDefaultState = () => ({
+      setupCompleted: false,
+      name: "",
+      avatarUrl: "",
+      timezone: "Europe/London",
+      clockFormat: "12h", // '12h' | '24h'
+      theme: "midnight",
+      customCursor: true,
+      tabCloak: "lume",
+      customTabTitle: "",
+      panicKey: "]",
+      panicUrl: "https://www.google.com",
+      panicBehavior: "iframe", // 'iframe' | 'newtab'
+      shortcutsEnabled: true,
+      recentlyPlayed: []
+    });
+
+    const loadSettings = () => {
+      try {
+        const data = localStorage.getItem(STORAGE_KEY);
+        return data ? { ...getDefaultState(), ...JSON.parse(data) } : getDefaultState();
+      } catch (e) {
+        console.warn("Storage access failed, using state memory", e);
+        return getDefaultState();
+      }
+    };
+
+    const persistSettings = (data) => {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      } catch (e) {
+        console.error("Failed to save settings", e);
+      }
+    };
+
+    // --- TIME UTILITIES ---
+    const getGreetingByHour = (hour) => {
+      if (hour >= 5 && hour < 12) return "Good Morning";
+      if (hour >= 12 && hour < 18) return "Good Afternoon";
+      return "Good Evening";
+    };
+
+    const getFormattedTimeAndGreeting = (timezone, is24h) => {
+      try {
+        const now = new Date();
+        const formatter = new Intl.DateTimeFormat("en-US", {
+          timeZone: timezone || "Europe/London",
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: !is24h
+        });
+        const hourFormatter = new Intl.DateTimeFormat("en-US", {
+          timeZone: timezone || "Europe/London",
+          hour: "numeric",
+          hourCycle: "h23"
+        });
+        const currentHour = parseInt(hourFormatter.format(now), 10);
+        return {
+          formattedTime: formatter.format(now),
+          greeting: getGreetingByHour(currentHour)
+        };
+      } catch (err) {
+        const now = new Date();
+        return {
+          formattedTime: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          greeting: "Welcome"
+        };
+      }
+    };
+
+    // Generate tasteful geometric SVGs when avatar skipped
+    const generateAvatar = (name) => {
+      const initial = (name || "L").charAt(0).toUpperCase();
+      const colors = ["#3b82f6", "#10b981", "#8b5cf6", "#f43f5e", "#f59e0b", "#06b6d4"];
+      const hash = initial.charCodeAt(0) % colors.length;
+      const bg = colors[hash];
+      return `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='${encodeURIComponent(bg)}'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='42' font-weight='bold' fill='white'>${initial}</text></svg>`;
+    };
+
+    // ==========================================
+    // CUSTOM CURSOR HOOK & COMPONENT
+    // ==========================================
+    const CustomCursor = ({ enabled }) => {
+      const dotRef = useRef(null);
+      const ringRef = useRef(null);
+
+      useEffect(() => {
+        if (!enabled) return;
+
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let ringX = mouseX;
+        let ringY = mouseY;
+        let animId;
+
+        const onMouseMove = (e) => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+          if (dotRef.current) {
+            dotRef.current.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+          }
+        };
+
+        const render = () => {
+          // Smooth spring interpolation for ring
+          ringX += (mouseX - ringX) * 0.2;
+          ringY += (mouseY - ringY) * 0.2;
+          if (ringRef.current) {
+            ringRef.current.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
+          }
+          animId = requestAnimationFrame(render);
+        };
+
+        const handleHoverOver = (e) => {
+          const target = e.target;
+          if (target && (target.closest('button') || target.closest('a') || target.closest('input') || target.closest('[role="button"]'))) {
+            document.body.classList.add('cursor-hover');
+          } else {
+            document.body.classList.remove('cursor-hover');
+          }
+        };
+
+        window.addEventListener("mousemove", onMouseMove, { passive: true });
+        window.addEventListener("mouseover", handleHoverOver, { passive: true });
+        animId = requestAnimationFrame(render);
+
+        return () => {
+          window.removeEventListener("mousemove", onMouseMove);
+          window.removeEventListener("mouseover", handleHoverOver);
+          cancelAnimationFrame(animId);
+          document.body.classList.remove('cursor-hover');
+        };
+      }, [enabled]);
+
+      if (!enabled) return null;
+
+      return (
+        <div className="hidden md:block">
+          <div ref={dotRef} className="lume-cursor-dot" />
+          <div ref={ringRef} className="lume-cursor-ring" />
+        </div>
+      );
+    };
+
+    // ==========================================
+    // ONBOARDING EXPERIENCE
+    // ==========================================
+    const Onboarding = ({ onComplete, initialTimezone }) => {
+      const [step, setStep] = useState(1);
+      const [name, setName] = useState("");
+      const [avatar, setAvatar] = useState("");
+      const [timezone, setTimezone] = useState(initialTimezone || "Europe/London");
+      const [clockFormat, setClockFormat] = useState("12h");
+      const [tzSearch, setTzSearch] = useState("");
+
+      const { greeting } = getFormattedTimeAndGreeting(timezone, false);
+
+      const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          if (file.size > 2 * 1024 * 1024) {
+            alert("Please choose an image under 2MB.");
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = (uploadEvent) => {
+            setAvatar(uploadEvent.target.result);
+          };
+          reader.readAsDataURL(file);
+        }
+      };
+
+      const handleFinish = () => {
+        const resolvedAvatar = avatar || generateAvatar(name);
+        onComplete({
+          name: name.trim() || "Traveler",
+          avatarUrl: resolvedAvatar,
+          timezone: timezone || "Europe/London",
+          clockFormat,
+          setupCompleted: true
+        });
+      };
+
+      const filteredTimezones = useMemo(() => {
+        return TIMEZONES.filter(t => t.label.toLowerCase().includes(tzSearch.toLowerCase()));
+      }, [tzSearch]);
+
+      return (
+        <div className="min-h-screen w-full flex items-center justify-center p-6 transition-all duration-700 bg-theme-bg">
+          <div className="w-full max-w-md bg-theme-surface border border-theme-border rounded-2xl p-8 shadow-lume-lg relative overflow-hidden backdrop-blur">
+            {/* Minimal brand pill */}
+            <div className="flex items-center gap-2 mb-8">
+              <div className="w-2 h-2 rounded-full bg-theme-accent animate-pulse" />
+              <span className="text-xs uppercase tracking-widest font-mono text-theme-muted">Lume Setup</span>
+            </div>
+
+            {/* STEP 1: Name */}
+            {step === 1 && (
+              <div className="space-y-6 animate-fadeIn">
+                <div>
+                  <h1 className="text-3xl font-bold tracking-tight text-theme-foreground">{greeting}</h1>
+                  <p className="text-theme-muted mt-2 text-sm">Welcome to Lume. What should we call you?</p>
+                </div>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (name.trim()) setStep(2);
+                  }}
+                  className="space-y-4"
+                >
+                  <input
+                    type="text"
+                    required
+                    autoFocus
+                    placeholder="Enter your name..."
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full px-4 py-3 bg-theme-surface-active border border-theme-border rounded-xl text-theme-foreground placeholder-theme-muted focus:border-theme-accent focus:outline-none transition"
+                  />
+                  <button
+                    type="submit"
+                    disabled={!name.trim()}
+                    className="w-full py-3 bg-theme-accent text-gray-950 font-semibold rounded-xl hover:bg-theme-accent-hover transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    <span>Continue</span>
+                    <Icons.ChevronRight size={16} />
+                  </button>
+                </form>
+              </div>
+            )}
+
+            {/* STEP 2: Avatar */}
+            {step === 2 && (
+              <div className="space-y-6 animate-fadeIn">
+                <div>
+                  <h2 className="text-2xl font-bold text-theme-foreground">Would you like a profile picture, {name}?</h2>
+                  <p className="text-theme-muted mt-1 text-sm">Completely optional. We will generate one if you choose to skip.</p>
+                </div>
+
+                <div className="flex flex-col items-center justify-center gap-4 py-4">
+                  <div className="w-24 h-24 rounded-2xl overflow-hidden border-2 border-theme-border bg-theme-surface-active flex items-center justify-center">
+                    {avatar ? (
+                      <img src={avatar} alt="Preview" className="w-full h-full object-cover" />
+                    ) : (
+                      <img src={generateAvatar(name)} alt="Default" className="w-full h-full object-cover" />
+                    )}
+                  </div>
+
+                  <label className="cursor-pointer text-xs font-medium px-4 py-2 rounded-lg bg-theme-surface-hover hover:bg-theme-surface-active border border-theme-border transition text-theme-foreground flex items-center gap-2">
+                    <Icons.Upload size={14} />
+                    <span>Upload Image</span>
+                    <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                  </label>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAvatar("");
+                      setStep(3);
+                    }}
+                    className="py-3 px-4 border border-theme-border rounded-xl text-theme-muted hover:text-theme-foreground hover:bg-theme-surface-hover transition text-sm font-medium"
+                  >
+                    Skip
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setStep(3)}
+                    className="py-3 px-4 bg-theme-accent text-gray-950 font-semibold rounded-xl hover:bg-theme-accent-hover transition text-sm"
+                  >
+                    Continue
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* STEP 3: Timezone */}
+            {step === 3 && (
+              <div className="space-y-5 animate-fadeIn">
+                <div>
+                  <h2 className="text-2xl font-bold text-theme-foreground">What time zone are you in?</h2>
+                  <p className="text-theme-muted mt-1 text-sm">Used for synchronizing your contextual dashboard greeting and clock.</p>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="relative">
+                    <Icons.Search size={16} className="absolute left-3.5 top-3.5 text-theme-muted" />
+                    <input
+                      type="text"
+                      placeholder="Search timezone..."
+                      value={tzSearch}
+                      onChange={(e) => setTzSearch(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2.5 bg-theme-surface-active border border-theme-border rounded-xl text-sm text-theme-foreground placeholder-theme-muted focus:border-theme-accent focus:outline-none transition"
+                    />
+                  </div>
+                  <div className="max-h-48 overflow-y-auto space-y-1.5 pr-1">
+                    {filteredTimezones.map((tz) => (
+                      <button
+                        key={tz.value}
+                        type="button"
+                        onClick={() => setTimezone(tz.value)}
+                        className={`w-full text-left px-3.5 py-2 rounded-lg text-sm transition flex items-center justify-between ${
+                          timezone === tz.value
+                            ? "bg-theme-accent-muted border border-theme-accent text-theme-accent font-medium"
+                            : "hover:bg-theme-surface-hover text-theme-foreground"
+                        }`}
+                      >
+                        <span>{tz.label}</span>
+                        {timezone === tz.value && <Icons.Check size={14} />}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTimezone("Europe/London");
+                      setStep(4);
+                    }}
+                    className="py-3 px-4 border border-theme-border rounded-xl text-theme-muted hover:text-theme-foreground hover:bg-theme-surface-hover transition text-sm"
+                  >
+                    Skip (Use UK Time)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setStep(4)}
+                    className="py-3 px-4 bg-theme-accent text-gray-950 font-semibold rounded-xl hover:bg-theme-accent-hover transition text-sm"
+                  >
+                    Continue
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* STEP 4: Clock Preference */}
+            {step === 4 && (
+              <div className="space-y-6 animate-fadeIn">
+                <div>
+                  <h2 className="text-2xl font-bold text-theme-foreground">How do you prefer your clock?</h2>
+                  <p className="text-theme-muted mt-1 text-sm">Choose your preferred format. You can adjust this anytime.</p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 py-2">
+                  <button
+                    type="button"
+                    onClick={() => setClockFormat("12h")}
+                    className={`p-5 rounded-xl border text-center transition flex flex-col items-center gap-2 ${
+                      clockFormat === "12h"
+                        ? "border-theme-accent bg-theme-accent-muted text-theme-foreground font-semibold"
+                        : "border-theme-border bg-theme-surface-active text-theme-muted hover:border-theme-muted"
+                    }`}
+                  >
+                    <span className="text-xl font-mono">06:42 PM</span>
+                    <span className="text-xs opacity-75">12-Hour</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setClockFormat("24h")}
+                    className={`p-5 rounded-xl border text-center transition flex flex-col items-center gap-2 ${
+                      clockFormat === "24h"
+                        ? "border-theme-accent bg-theme-accent-muted text-theme-foreground font-semibold"
+                        : "border-theme-border bg-theme-surface-active text-theme-muted hover:border-theme-muted"
+                    }`}
+                  >
+                    <span className="text-xl font-mono">18:42</span>
+                    <span className="text-xs opacity-75">24-Hour</span>
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleFinish}
+                  className="w-full py-3.5 bg-theme-accent text-gray-950 font-semibold rounded-xl hover:bg-theme-accent-hover transition shadow-lume flex items-center justify-center gap-2"
+                >
+                  <Icons.Sparkles size={16} />
+                  <span>Enter Lume</span>
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    };
+
+    // ==========================================
+    // PLAYABLE BUILT-IN CANVAS GAMES
+    // ==========================================
+    const CanvasGamePlayer = ({ game, onBack }) => {
+      const canvasRef = useRef(null);
+
+      useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        let animationFrameId;
+
+        // Make canvas sharp on HiDPI
+        const width = 600;
+        const height = 450;
+        canvas.width = width;
+        canvas.height = height;
+
+        // 1. BUILT-IN SNAKE IMPLEMENTATION
+        if (game.type === "builtin-snake") {
+          let snake = [{ x: 10, y: 10 }];
+          let food = { x: 15, y: 15 };
+          let dx = 1, dy = 0;
+          let score = 0;
+          const gridSize = 20;
+          const cols = width / gridSize;
+          const rows = height / gridSize;
+          let tick = 0;
+
+          const handleKey = (e) => {
+            if (e.key === "ArrowUp" && dy === 0) { dx = 0; dy = -1; }
+            if (e.key === "ArrowDown" && dy === 0) { dx = 0; dy = 1; }
+            if (e.key === "ArrowLeft" && dx === 0) { dx = -1; dy = 0; }
+            if (e.key === "ArrowRight" && dx === 0) { dx = 1; dy = 0; }
+          };
+          window.addEventListener("keydown", handleKey);
+
+          const loop = () => {
+            tick++;
+            if (tick % 7 === 0) {
+              const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+              // Wrap edges
+              if (head.x < 0) head.x = cols - 1;
+              if (head.x >= cols) head.x = 0;
+              if (head.y < 0) head.y = rows - 1;
+              if (head.y >= rows) head.y = 0;
+
+              // Self collision check
+              if (snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+                snake = [{ x: 10, y: 10 }];
+                dx = 1; dy = 0;
+                score = 0;
+              } else {
+                snake.unshift(head);
+                if (head.x === food.x && head.y === food.y) {
+                  score += 10;
+                  food = {
+                    x: Math.floor(Math.random() * cols),
+                    y: Math.floor(Math.random() * rows)
+                  };
+                } else {
+                  snake.pop();
+                }
+              }
+            }
+
+            // Draw
+            ctx.fillStyle = "#0a0d14";
+            ctx.fillRect(0, 0, width, height);
+
+            // Food
+            ctx.fillStyle = "#38bdf8";
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = "#38bdf8";
+            ctx.beginPath();
+            ctx.arc(food.x * gridSize + gridSize/2, food.y * gridSize + gridSize/2, gridSize/3, 0, Math.PI*2);
+            ctx.fill();
+
+            // Snake
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = "#ffffff";
+            snake.forEach((seg, i) => {
+              ctx.fillStyle = i === 0 ? "#2dd4bf" : "#e2f4f8";
+              ctx.fillRect(seg.x * gridSize + 2, seg.y * gridSize + 2, gridSize - 4, gridSize - 4);
+            });
+
+            // Score HUD
+            ctx.fillStyle = "#94a3b8";
+            ctx.font = "14px 'Plus Jakarta Sans', sans-serif";
+            ctx.fillText(`Score: ${score}`, 20, 30);
+            ctx.fillText("Use Arrow Keys to Navigate", width - 210, 30);
+
+            animationFrameId = requestAnimationFrame(loop);
+          };
+          loop();
+          return () => {
+            window.removeEventListener("keydown", handleKey);
+            cancelAnimationFrame(animationFrameId);
+          };
+        }
+
+        // 2. BUILT-IN PONG IMPLEMENTATION
+        if (game.type === "builtin-pong") {
+          let p1Y = height / 2 - 40;
+          let p2Y = height / 2 - 40;
+          let ballX = width / 2, ballY = height / 2;
+          let bdx = 4, bdy = 3;
+          let p1Score = 0, p2Score = 0;
+          const paddleHeight = 70, paddleWidth = 10;
+
+          const onMouseMove = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const y = e.clientY - rect.top - paddleHeight / 2;
+            p1Y = Math.max(0, Math.min(height - paddleHeight, y));
+          };
+          canvas.addEventListener("mousemove", onMouseMove);
+
+          const loop = () => {
+            ballX += bdx;
+            ballY += bdy;
+
+            // Bounce top/bottom
+            if (ballY <= 0 || ballY >= height) bdy *= -1;
+
+            // Simple AI paddle tracking with reaction speed
+            const targetY = ballY - paddleHeight / 2;
+            p2Y += (targetY - p2Y) * 0.08;
+            p2Y = Math.max(0, Math.min(height - paddleHeight, p2Y));
+
+            // Collision Left paddle
+            if (ballX <= 25 && ballY >= p1Y && ballY <= p1Y + paddleHeight) {
+              bdx = Math.abs(bdx) * 1.05;
+              bdy += (ballY - (p1Y + paddleHeight / 2)) * 0.1;
+            }
+
+            // Collision Right paddle
+            if (ballX >= width - 25 && ballY >= p2Y && ballY <= p2Y + paddleHeight) {
+              bdx = -Math.abs(bdx) * 1.05;
+            }
+
+            // Score logic
+            if (ballX < 0) {
+              p2Score++;
+              ballX = width / 2; ballY = height / 2; bdx = 4;
+            } else if (ballX > width) {
+              p1Score++;
+              ballX = width / 2; ballY = height / 2; bdx = -4;
+            }
+
+            // Render
+            ctx.fillStyle = "#0c1017";
+            ctx.fillRect(0, 0, width, height);
+
+            // Center Net
+            ctx.strokeStyle = "#1e293b";
+            ctx.setLineDash([6, 6]);
+            ctx.beginPath();
+            ctx.moveTo(width / 2, 0);
+            ctx.lineTo(width / 2, height);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Paddles
+            ctx.fillStyle = "#38bdf8";
+            ctx.fillRect(15, p1Y, paddleWidth, paddleHeight);
+            ctx.fillStyle = "#f43f5e";
+            ctx.fillRect(width - 25, p2Y, paddleWidth, paddleHeight);
+
+            // Ball
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(ballX, ballY, 6, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Scores
+            ctx.fillStyle = "#64748b";
+            ctx.font = "24px 'JetBrains Mono', monospace";
+            ctx.fillText(p1Score, width / 2 - 45, 45);
+            ctx.fillText(p2Score, width / 2 + 30, 45);
+
+            animationFrameId = requestAnimationFrame(loop);
+          };
+          loop();
+          return () => {
+            canvas.removeEventListener("mousemove", onMouseMove);
+            cancelAnimationFrame(animationFrameId);
+          };
+        }
+
+        // 3. COSMIC DODGER
+        if (game.type === "builtin-dodger") {
+          let playerX = width / 2;
+          let meteors = [];
+          let score = 0;
+          let alive = true;
+
+          const onMove = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            playerX = Math.max(15, Math.min(width - 15, e.clientX - rect.left));
+          };
+          canvas.addEventListener("mousemove", onMove);
+
+          const loop = () => {
+            if (alive) {
+              score++;
+              if (Math.random() < 0.08) {
+                meteors.push({
+                  x: Math.random() * width,
+                  y: -10,
+                  speed: 2.5 + Math.random() * 3.5,
+                  radius: 5 + Math.random() * 8
+                });
+              }
+
+              meteors.forEach(m => m.y += m.speed);
+              meteors = meteors.filter(m => m.y < height + 20);
+
+              // Check collisions
+              meteors.forEach(m => {
+                const dist = Math.hypot(m.x - playerX, m.y - (height - 30));
+                if (dist < m.radius + 8) {
+                  alive = false;
+                }
+              });
+            }
+
+            ctx.fillStyle = "#0a0a12";
+            ctx.fillRect(0, 0, width, height);
+
+            // Meteors
+            ctx.fillStyle = "#f97316";
+            meteors.forEach(m => {
+              ctx.beginPath();
+              ctx.arc(m.x, m.y, m.radius, 0, Math.PI * 2);
+              ctx.fill();
+            });
+
+            // Player Ship
+            ctx.fillStyle = alive ? "#38bdf8" : "#ef4444";
+            ctx.beginPath();
+            ctx.moveTo(playerX, height - 42);
+            ctx.lineTo(playerX - 10, height - 22);
+            ctx.lineTo(playerX + 10, height - 22);
+            ctx.closePath();
+            ctx.fill();
+
+            // HUD
+            ctx.fillStyle = "#cbd5e1";
+            ctx.font = "14px 'Plus Jakarta Sans'";
+            ctx.fillText(`Distance: ${score}m`, 20, 30);
+
+            if (!alive) {
+              ctx.fillStyle = "#ef4444";
+              ctx.font = "24px 'Plus Jakarta Sans'";
+              ctx.fillText("Collision Detected! Click to restart.", width / 2 - 170, height / 2);
+            }
+
+            animationFrameId = requestAnimationFrame(loop);
+          };
+
+          const restart = () => {
+            if (!alive) {
+              alive = true;
+              score = 0;
+              meteors = [];
+            }
+          };
+          canvas.addEventListener("click", restart);
+
+          loop();
+          return () => {
+            canvas.removeEventListener("mousemove", onMove);
+            canvas.removeEventListener("click", restart);
+            cancelAnimationFrame(animationFrameId);
+          };
+        }
+
+        // 4. BUILT-IN 2048 (Simplified quick canvas port)
+        if (game.type === "builtin-2048") {
+          let board = [
+            [0, 2, 0, 0],
+            [0, 0, 2, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]
+          ];
+          let score = 4;
+
+          const drawBoard = () => {
+            ctx.fillStyle = "#12141c";
+            ctx.fillRect(0, 0, width, height);
+            const size = 70;
+            const startX = width / 2 - (size * 2 + 15);
+            const startY = height / 2 - (size * 2 + 15);
+
+            for (let r = 0; r < 4; r++) {
+              for (let c = 0; c < 4; c++) {
+                const val = board[r][c];
+                const x = startX + c * (size + 10);
+                const y = startY + r * (size + 10);
+
+                ctx.fillStyle = val === 0 ? "#1c202d" : "#3b82f6";
+                ctx.beginPath();
+                ctx.roundRect(x, y, size, size, 8);
+                ctx.fill();
+
+                if (val > 0) {
+                  ctx.fillStyle = "#ffffff";
+                  ctx.font = "bold 20px 'JetBrains Mono'";
+                  ctx.textAlign = "center";
+                  ctx.textBaseline = "middle";
+                  ctx.fillText(val, x + size / 2, y + size / 2);
+                }
+              }
+            }
+            ctx.fillStyle = "#94a3b8";
+            ctx.font = "14px 'Plus Jakarta Sans'";
+            ctx.fillText("Use Arrow keys or WASD to Slide Tiles", width / 2 - 110, height - 30);
+          };
+
+          const addTile = () => {
+            let empty = [];
+            for (let r = 0; r < 4; r++)
+              for (let c = 0; c < 4; c++)
+                if (board[r][c] === 0) empty.push({ r, c });
+            if (empty.length > 0) {
+              const pick = empty[Math.floor(Math.random() * empty.length)];
+              board[pick.r][pick.c] = Math.random() < 0.9 ? 2 : 4;
+            }
+          };
+
+          const handleKeyDown = (e) => {
+            let moved = false;
+            // Basic demo sliding trigger
+            if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "w", "a", "s", "d"].includes(e.key)) {
+              addTile();
+              drawBoard();
+            }
+          };
+
+          drawBoard();
+          window.addEventListener("keydown", handleKeyDown);
+          return () => window.removeEventListener("keydown", handleKeyDown);
+        }
+      }, [game]);
+
+      return (
+        <div className="space-y-4 max-w-4xl mx-auto">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={onBack}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-theme-surface border border-theme-border text-xs font-medium hover:bg-theme-surface-hover text-theme-foreground transition"
+            >
+              <Icons.ArrowLeft size={14} />
+              <span>Back to Games</span>
+            </button>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-theme-muted font-mono">{game.category}</span>
+              <span className="text-sm font-semibold text-theme-foreground">{game.title}</span>
+            </div>
+          </div>
+
+          <div className="relative border border-theme-border rounded-2xl overflow-hidden shadow-lume-lg bg-theme-surface flex items-center justify-center p-2">
+            <canvas
+              ref={canvasRef}
+              className="rounded-xl w-full max-w-[600px] h-[450px] shadow-inner bg-black cursor-crosshair"
+            />
+          </div>
+          <p className="text-xs text-theme-muted text-center">
+            {game.description}
+          </p>
+        </div>
+      );
+    };
+
+    // ==========================================
+    // MAIN APPLICATION CONTAINER & NAVIGATION
+    // ==========================================
+    const App = () => {
+      const [settings, setSettings] = useState(loadSettings);
+      const [activeTab, setActiveTab] = useState("home"); // 'home' | 'games' | 'apps' | 'profile' | 'settings'
+      const [searchQuery, setSearchQuery] = useState("");
+      const [selectedCategory, setSelectedCategory] = useState("All");
+      const [activeGame, setActiveGame] = useState(null);
+      const [currentTime, setCurrentTime] = useState({ formattedTime: "--:--", greeting: "Welcome" });
+      const [panicActive, setPanicActive] = useState(false);
+      const [toastMessage, setToastMessage] = useState(null);
+
+      // Persist state updates cleanly
+      const updateSettings = useCallback((updates) => {
+        setSettings((prev) => {
+          const next = { ...prev, ...updates };
+          persistSettings(next);
+          return next;
+        });
+      }, []);
+
+      // Notification toast helper
+      const showToast = (msg) => {
+        setToastMessage(msg);
+        setTimeout(() => setToastMessage(null), 3200);
+      };
+
+      // 1. Time ticker engine
+      useEffect(() => {
+        const update = () => {
+          const result = getFormattedTimeAndGreeting(
+            settings.timezone,
+            settings.clockFormat === "24h"
+          );
+          setCurrentTime(result);
+        };
+        update();
+        const interval = setInterval(update, 1000);
+        return () => clearInterval(interval);
+      }, [settings.timezone, settings.clockFormat]);
+
+      // 2. Active Theme Applier
+      useEffect(() => {
+        document.documentElement.setAttribute("data-theme", settings.theme);
+      }, [settings.theme]);
+
+      // 3. Browser Tab Cloaking Engine
+      useEffect(() => {
+        const activePreset = TAB_PRESETS.find(p => p.id === settings.tabCloak) || TAB_PRESETS[0];
+        const newTitle = settings.customTabTitle.trim() || activePreset.title;
+        document.title = newTitle;
+
+        const faviconEl = document.getElementById("lume-favicon");
+        if (faviconEl) {
+          faviconEl.setAttribute("href", activePreset.icon);
+        }
+      }, [settings.tabCloak, settings.customTabTitle]);
+
+      // 4. Panic Button & Global Shortcuts
+      useEffect(() => {
+        const handleKeyDown = (e) => {
+          // Avoid triggering shortcuts during input edits
+          const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : "";
+          const isInput = ["input", "textarea", "select"].includes(activeTag) || document.activeElement.isContentEditable;
+
+          // Quick Panic trigger
+          if (settings.panicKey && e.key === settings.panicKey) {
+            e.preventDefault();
+            triggerPanic();
+            return;
+          }
+
+          if (isInput || !settings.shortcutsEnabled) return;
+
+          if (e.key === "1") setActiveTab("home");
+          if (e.key === "2") { setActiveTab("games"); setActiveGame(null); }
+          if (e.key === "3") setActiveTab("apps");
+          if (e.key === "4") setActiveTab("profile");
+          if (e.key === "5") setActiveTab("settings");
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+      }, [settings.panicKey, settings.panicUrl, settings.panicBehavior, settings.shortcutsEnabled]);
+
+      // Panic action executor
+      const triggerPanic = () => {
+        const targetUrl = settings.panicUrl.startsWith("http") ? settings.panicUrl : `https://${settings.panicUrl}`;
+        if (settings.panicBehavior === "newtab") {
+          const newWindow = window.open(targetUrl, "_blank");
+          if (!newWindow || newWindow.closed || typeof newWindow.closed === "undefined") {
+            showToast("Popup blocked by browser. Switching to fullscreen fallback.");
+            setPanicActive(true);
+          } else {
+            // Browser security restricts arbitrary window.close() unless opened via script
+            try {
+              window.close();
+            } catch (err) {
+              // Graceful fallback if close is forbidden
+            }
+          }
+        } else {
+          setPanicActive(true);
+        }
+      };
+
+      // 5. graceful about:blank spawn
+      const openInAboutBlank = () => {
+        try {
+          const newWin = window.open("about:blank", "_blank");
+          if (!newWin || newWin.closed || typeof newWin.closed === "undefined") {
+            showToast("Popup blocked! Please allow popups for Lume to open in about:blank.");
+            return;
+          }
+
+          const doc = newWin.document;
+          doc.title = document.title;
+          const iframe = doc.createElement("iframe");
+          iframe.style.position = "fixed";
+          iframe.style.top = "0";
+          iframe.style.left = "0";
+          iframe.style.width = "100%";
+          iframe.style.height = "100%";
+          iframe.style.border = "none";
+          iframe.style.margin = "0";
+          iframe.style.padding = "0";
+          iframe.style.overflow = "hidden";
+          iframe.src = window.location.href;
+          doc.body.style.margin = "0";
+          doc.body.style.padding = "0";
+          doc.body.appendChild(iframe);
+          showToast("Opened cleanly in about:blank container.");
+        } catch (e) {
+          showToast("Unable to open about:blank due to browser limitations.");
+        }
+      };
+
+      // If panic state triggered via fullscreen replacement
+      if (panicActive) {
+        return (
+          <div className="fixed inset-0 z-50 bg-black flex flex-col">
+            <div className="h-10 bg-neutral-900 border-b border-neutral-800 px-4 flex items-center justify-between text-xs text-neutral-400">
+              <span>Exit Safe Shield Mode</span>
+              <button
+                onClick={() => setPanicActive(false)}
+                className="px-2.5 py-1 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded font-mono text-[11px]"
+              >
+                Restore Lume [Esc]
+              </button>
+            </div>
+            <iframe
+              src={settings.panicUrl}
+              className="w-full flex-1 border-none"
+              title="Quick Exit Shield"
+              sandbox="allow-scripts allow-same-origin allow-forms"
+            />
+          </div>
+        );
+      }
+
+      // Check onboarding
+      if (!settings.setupCompleted) {
+        return (
+          <>
+            <CustomCursor enabled={settings.customCursor} />
+            <Onboarding
+              initialTimezone={settings.timezone}
+              onComplete={(userData) => {
+                updateSettings(userData);
+              }}
+            />
+          </>
+        );
+      }
+
+      // Filtered Games logic
+      const filteredGames = INITIAL_GAMES.filter(g => {
+        const matchesCategory = selectedCategory === "All" || g.category === selectedCategory;
+        const matchesSearch = g.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          g.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          g.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()));
+        return matchesCategory && matchesSearch;
+      });
+
+      const categories = ["All", ...new Set(INITIAL_GAMES.map(g => g.category))];
+
+      return (
+        <div className="min-h-screen bg-theme-bg text-theme-foreground flex flex-col antialiased selection:bg-theme-accent-muted selection:text-theme-accent">
+          <CustomCursor enabled={settings.customCursor} />
+
+          {/* Persistent subtle Toast alerts */}
+          {toastMessage && (
+            <div className="fixed bottom-6 right-6 z-50 px-4 py-2.5 rounded-xl bg-theme-surface border border-theme-border shadow-lume text-xs font-medium flex items-center gap-2 animate-bounce">
+              <Icons.Sparkles size={14} className="text-theme-accent" />
+              <span>{toastMessage}</span>
+            </div>
+          )}
+
+          {/* Top Global Navigation Bar */}
+          <header className="sticky top-0 z-40 w-full border-b border-theme-border/60 bg-theme-bg/85 backdrop-blur-md">
+            <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+              {/* Brand Logo */}
+              <div
+                onClick={() => { setActiveTab("home"); setActiveGame(null); }}
+                className="flex items-center gap-2.5 cursor-pointer group"
+              >
+                <div className="w-8 h-8 rounded-xl bg-theme-accent-muted border border-theme-accent/30 flex items-center justify-center text-theme-accent group-hover:scale-105 transition">
+                  <div className="w-3 h-3 rounded-full bg-theme-accent shadow-sm" />
+                </div>
+                <span className="font-bold text-lg tracking-tight text-theme-foreground">Lume</span>
+              </div>
+
+              {/* Navigation Links */}
+              <nav className="flex items-center gap-1.5 p-1 bg-theme-surface/70 border border-theme-border rounded-xl">
+                {[
+                  { id: "home", label: "Home", icon: Icons.Grid },
+                  { id: "games", label: "Games", icon: Icons.Gamepad },
+                  { id: "apps", label: "Apps", icon: Icons.Sparkles },
+                  { id: "profile", label: "Profile", icon: Icons.User },
+                  { id: "settings", label: "Settings", icon: Icons.Settings },
+                ].map((item) => {
+                  const IconComponent = item.icon;
+                  const isActive = activeTab === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setActiveTab(item.id);
+                        if (item.id !== "games") setActiveGame(null);
+                      }}
+                      className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition flex items-center gap-2 ${
+                        isActive
+                          ? "bg-theme-surface-active text-theme-foreground border border-theme-border shadow-lume-sm"
+                          : "text-theme-muted hover:text-theme-foreground hover:bg-theme-surface-hover"
+                      }`}
+                    >
+                      <IconComponent size={14} />
+                      <span className="hidden sm:inline">{item.label}</span>
+                    </button>
+                  );
+                })}
+              </nav>
+
+              {/* Top Right Mini Clock / User */}
+              <div className="flex items-center gap-3">
+                <div className="hidden md:flex flex-col items-end text-right">
+                  <span className="text-xs font-mono font-medium text-theme-foreground">{currentTime.formattedTime}</span>
+                  <span className="text-[10px] text-theme-muted">{settings.timezone.split("/")[1]?.replace("_", " ") || "London"}</span>
+                </div>
+                <div
+                  onClick={() => setActiveTab("profile")}
+                  className="w-8 h-8 rounded-full overflow-hidden border border-theme-border cursor-pointer hover:border-theme-accent transition"
+                >
+                  <img src={settings.avatarUrl || generateAvatar(settings.name)} alt="Profile" className="w-full h-full object-cover" />
+                </div>
+              </div>
+            </div>
+          </header>
+
+          {/* Main Body Viewport */}
+          <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-8">
+            {/* ======================= TAB: HOME ======================= */}
+            {activeTab === "home" && (
+              <div className="space-y-12 animate-fadeIn">
+                {/* Hero Greeting Section */}
+                <div className="pt-8 pb-4 text-center max-w-2xl mx-auto space-y-3">
+                  <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-theme-foreground">
+                    {currentTime.greeting}, {settings.name}
+                  </h1>
+                  <p className="text-lg font-mono text-theme-muted">
+                    It is <span className="text-theme-foreground font-semibold">{currentTime.formattedTime}</span>
+                  </p>
+
+                  <div className="pt-2 flex items-center justify-center gap-3">
+                    <button
+                      onClick={openInAboutBlank}
+                      className="px-4 py-2 rounded-xl text-xs font-medium bg-theme-surface border border-theme-border hover:bg-theme-surface-hover text-theme-muted hover:text-theme-foreground transition inline-flex items-center gap-2"
+                    >
+                      <Icons.ExternalLink size={14} />
+                      <span>Open in about:blank</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Primary Hub Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {[
+                    { id: "games", title: "Games Hub", desc: "Launch hand-crafted games", icon: Icons.Gamepad, count: `${INITIAL_GAMES.length} ready` },
+                    { id: "apps", title: "App Center", desc: "Upcoming utilities", icon: Icons.Sparkles, count: "Building" },
+                    { id: "profile", title: "Your Profile", desc: "Personal identity & records", icon: Icons.User, count: settings.name },
+                    { id: "settings", title: "Preferences", desc: "Themes, cloaking, panic key", icon: Icons.Settings, count: "Customizable" },
+                  ].map((card) => {
+                    const CardIcon = card.icon;
+                    return (
+                      <div
+                        key={card.id}
+                        onClick={() => {
+                          setActiveTab(card.id);
+                          if (card.id !== "games") setActiveGame(null);
+                        }}
+                        className="group p-6 rounded-2xl bg-theme-surface border border-theme-border hover:border-theme-accent/50 hover:bg-theme-surface-hover transition cursor-pointer flex flex-col justify-between h-44 shadow-lume-sm hover:shadow-lume"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="w-10 h-10 rounded-xl bg-theme-surface-active border border-theme-border flex items-center justify-center text-theme-accent group-hover:scale-110 transition">
+                            <CardIcon size={20} />
+                          </div>
+                          <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-theme-surface-active text-theme-muted">{card.count}</span>
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-theme-foreground group-hover:text-theme-accent transition">{card.title}</h3>
+                          <p className="text-xs text-theme-muted mt-1">{card.desc}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Featured Games Quick Carousel */}
+                <div className="space-y-4 pt-4">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-sm font-bold uppercase tracking-wider font-mono text-theme-muted">Featured Experiences</h2>
+                    <button
+                      onClick={() => setActiveTab("games")}
+                      className="text-xs text-theme-accent hover:underline flex items-center gap-1 font-medium"
+                    >
+                      <span>Explore all</span>
+                      <Icons.ChevronRight size={14} />
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    {INITIAL_GAMES.filter(g => g.featured).map((game) => (
+                      <div
+                        key={game.id}
+                        onClick={() => {
+                          setActiveGame(game);
+                          setActiveTab("games");
+                        }}
+                        className="group bg-theme-surface rounded-2xl border border-theme-border overflow-hidden hover:border-theme-accent/50 transition cursor-pointer shadow-lume-sm hover:shadow-lume"
+                      >
+                        <div className="h-36 w-full relative overflow-hidden bg-theme-surface-active">
+                          <img
+                            src={game.thumbnail}
+                            alt={game.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                            loading="lazy"
+                          />
+                          <div className="absolute top-3 right-3 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-md text-[11px] font-mono text-white">
+                            {game.category}
+                          </div>
+                        </div>
+                        <div className="p-4 space-y-1.5">
+                          <h4 className="font-semibold text-sm text-theme-foreground group-hover:text-theme-accent transition">{game.title}</h4>
+                          <p className="text-xs text-theme-muted line-clamp-2">{game.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ======================= TAB: GAMES ======================= */}
+            {activeTab === "games" && (
+              <div className="space-y-6">
+                {activeGame ? (
+                  <CanvasGamePlayer
+                    game={activeGame}
+                    onBack={() => setActiveGame(null)}
+                  />
+                ) : (
+                  <>
+                    {/* Header + Search/Filter Toolbar */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-theme-border pb-6">
+                      <div>
+                        <h2 className="text-2xl font-bold tracking-tight text-theme-foreground">Games Hub</h2>
+                        <p className="text-xs text-theme-muted mt-0.5">Explore high-performance browser games and interactive tools.</p>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <div className="relative w-full sm:w-64">
+                          <Icons.Search size={15} className="absolute left-3 top-3 text-theme-muted" />
+                          <input
+                            type="text"
+                            placeholder="Search games..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full pl-9 pr-4 py-2 bg-theme-surface border border-theme-border rounded-xl text-xs text-theme-foreground placeholder-theme-muted focus:border-theme-accent focus:outline-none transition"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Category Filter Pills */}
+                    <div className="flex items-center gap-2 overflow-x-auto pb-2">
+                      {categories.map((cat) => (
+                        <button
+                          key={cat}
+                          onClick={() => setSelectedCategory(cat)}
+                          className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition shrink-0 ${
+                            selectedCategory === cat
+                              ? "bg-theme-accent text-gray-950 font-semibold"
+                              : "bg-theme-surface border border-theme-border text-theme-muted hover:text-theme-foreground hover:bg-theme-surface-hover"
+                          }`}
+                        >
+                          {cat}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Games Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+                      {filteredGames.length > 0 ? (
+                        filteredGames.map((game) => (
+                          <div
+                            key={game.id}
+                            onClick={() => setActiveGame(game)}
+                            className="group bg-theme-surface border border-theme-border rounded-2xl overflow-hidden hover:border-theme-accent/60 transition cursor-pointer shadow-lume-sm hover:shadow-lume flex flex-col"
+                          >
+                            <div className="h-44 w-full relative overflow-hidden bg-theme-surface-active">
+                              <img
+                                src={game.thumbnail}
+                                alt={game.title}
+                                className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                                loading="lazy"
+                              />
+                              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition flex items-center justify-center backdrop-blur-[2px]">
+                                <div className="px-4 py-2 bg-theme-accent text-gray-950 rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg transform translate-y-2 group-hover:translate-y-0 transition">
+                                  <Icons.Play size={14} />
+                                  <span>Launch</span>
+                                </div>
+                              </div>
+                              <div className="absolute top-3 right-3 px-2 py-0.5 rounded bg-black/70 backdrop-blur-md text-[11px] font-mono text-white">
+                                {game.category}
+                              </div>
+                            </div>
+
+                            <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
+                              <div>
+                                <h3 className="font-semibold text-theme-foreground group-hover:text-theme-accent transition text-base">{game.title}</h3>
+                                <p className="text-xs text-theme-muted mt-1 line-clamp-2 leading-relaxed">{game.description}</p>
+                              </div>
+
+                              <div className="flex flex-wrap gap-1.5 pt-2">
+                                {game.tags.map((tag) => (
+                                  <span key={tag} className="text-[10px] font-mono px-2 py-0.5 bg-theme-surface-active border border-theme-border rounded text-theme-muted">
+                                    #{tag}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="col-span-full py-16 text-center space-y-2">
+                          <p className="text-theme-muted text-sm">No games found matching your search criteria.</p>
+                          <button
+                            onClick={() => { setSearchQuery(""); setSelectedCategory("All"); }}
+                            className="text-xs text-theme-accent hover:underline"
+                          >
+                            Reset filters
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+
+            {/* ======================= TAB: APPS (UNDER CONSTRUCTION) ======================= */}
+            {activeTab === "apps" && (
+              <div className="py-20 flex flex-col items-center justify-center text-center max-w-md mx-auto space-y-5 animate-fadeIn">
+                <div className="w-16 h-16 rounded-2xl bg-theme-surface border border-theme-border flex items-center justify-center text-theme-accent shadow-lume">
+                  <Icons.Hammer size={28} className="animate-spin" style={{ animationDuration: '6s' }} />
+                </div>
+                <div className="space-y-2">
+                  <h2 className="text-2xl font-bold tracking-tight text-theme-foreground">Under Construction</h2>
+                  <p className="text-sm text-theme-muted leading-relaxed">
+                    We're still building this part of Lume. Apps and utilities are currently under active development.
+                  </p>
+                </div>
+                <div className="px-3 py-1.5 rounded-lg bg-theme-surface-active border border-theme-border text-xs font-mono text-theme-muted">
+                  Status: Pipeline v1.2 Active
+                </div>
+                <button
+                  onClick={() => setActiveTab("games")}
+                  className="px-4 py-2 rounded-xl bg-theme-accent text-gray-950 font-semibold text-xs hover:bg-theme-accent-hover transition shadow-lume-sm"
+                >
+                  Explore Games Meanwhile
+                </button>
+              </div>
+            )}
+
+            {/* ======================= TAB: PROFILE ======================= */}
+            {activeTab === "profile" && (
+              <div className="max-w-2xl mx-auto space-y-8 animate-fadeIn">
+                <div>
+                  <h2 className="text-2xl font-bold tracking-tight text-theme-foreground">Profile Overview</h2>
+                  <p className="text-xs text-theme-muted mt-0.5">Manage your identity and regional dashboard parameters.</p>
+                </div>
+
+                <div className="p-6 bg-theme-surface border border-theme-border rounded-2xl shadow-lume-sm space-y-6">
+                  <div className="flex items-center gap-5">
+                    <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-theme-border bg-theme-surface-active">
+                      <img
+                        src={settings.avatarUrl || generateAvatar(settings.name)}
+                        alt="Avatar"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="space-y-1 flex-1">
+                      <h3 className="font-bold text-lg text-theme-foreground">{settings.name}</h3>
+                      <p className="text-xs font-mono text-theme-muted">{settings.timezone} • {settings.clockFormat} Clock</p>
+                    </div>
+                  </div>
+
+                  <hr className="border-theme-border" />
+
+                  {/* Profile Edit Form */}
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-medium text-theme-muted mb-1.5">Display Name</label>
+                      <input
+                        type="text"
+                        value={settings.name}
+                        onChange={(e) => updateSettings({ name: e.target.value })}
+                        className="w-full px-3.5 py-2.5 bg-theme-surface-active border border-theme-border rounded-xl text-sm text-theme-foreground focus:border-theme-accent focus:outline-none transition"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-theme-muted mb-1.5">Update Avatar</label>
+                      <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-theme-surface-hover hover:bg-theme-surface-active border border-theme-border text-xs font-medium text-theme-foreground transition">
+                        <Icons.Upload size={14} />
+                        <span>Choose Local File</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file) {
+                              const r = new FileReader();
+                              r.onload = (ev) => updateSettings({ avatarUrl: ev.target.result });
+                              r.readAsDataURL(file);
+                            }
+                          }}
+                        />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ======================= TAB: SETTINGS ======================= */}
+            {activeTab === "settings" && (
+              <div className="max-w-3xl mx-auto space-y-10 animate-fadeIn pb-12">
+                <div>
+                  <h2 className="text-2xl font-bold tracking-tight text-theme-foreground">Settings & Preferences</h2>
+                  <p className="text-xs text-theme-muted mt-0.5">Customize your environment, security triggers, and tab cloaks.</p>
+                </div>
+
+                {/* 1. Appearance Themes */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Icons.Sparkles size={16} className="text-theme-accent" />
+                    <h3 className="font-semibold text-sm text-theme-foreground">Appearance Theme</h3>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {THEMES.map((th) => (
+                      <button
+                        key={th.id}
+                        onClick={() => updateSettings({ theme: th.id })}
+                        className={`p-3.5 rounded-xl border text-left flex items-center justify-between transition ${
+                          settings.theme === th.id
+                            ? "border-theme-accent bg-theme-accent-muted/40 shadow-sm"
+                            : "border-theme-border bg-theme-surface hover:border-theme-muted"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <div
+                            className="w-4 h-4 rounded-full border border-black/20"
+                            style={{ backgroundColor: th.preview }}
+                          />
+                          <span className="text-xs font-medium text-theme-foreground">{th.name}</span>
+                        </div>
+                        {settings.theme === th.id && <Icons.Check size={14} className="text-theme-accent" />}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 2. Custom Cursor Toggle */}
+                <div className="p-5 bg-theme-surface border border-theme-border rounded-2xl flex items-center justify-between">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <Icons.MousePointer size={15} className="text-theme-accent" />
+                      <h4 className="text-sm font-semibold text-theme-foreground">Fluid Custom Cursor</h4>
+                    </div>
+                    <p className="text-xs text-theme-muted">Enable spring-interpolated trailing cursor ring with magnetic hover states.</p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={settings.customCursor}
+                    onChange={(e) => updateSettings({ customCursor: e.target.checked })}
+                    className="w-5 h-5 accent-sky-500 rounded cursor-pointer"
+                  />
+                </div>
+
+                {/* 3. Tab Cloaking Presets */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Icons.ExternalLink size={16} className="text-theme-accent" />
+                    <h3 className="font-semibold text-sm text-theme-foreground">Tab Cloaking Appearance</h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {TAB_PRESETS.map((preset) => (
+                      <button
+                        key={preset.id}
+                        onClick={() => updateSettings({ tabCloak: preset.id })}
+                        className={`p-3 rounded-xl border text-left flex items-center justify-between transition ${
+                          settings.tabCloak === preset.id
+                            ? "border-theme-accent bg-theme-accent-muted/40"
+                            : "border-theme-border bg-theme-surface hover:bg-theme-surface-hover"
+                        }`}
+                      >
+                        <span className="text-xs font-medium text-theme-foreground">{preset.name}</span>
+                        {settings.tabCloak === preset.id && <Icons.Check size={14} className="text-theme-accent" />}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-theme-muted mb-1">Custom Title Override</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Google Docs, Wikipedia..."
+                      value={settings.customTabTitle}
+                      onChange={(e) => updateSettings({ customTabTitle: e.target.value })}
+                      className="w-full px-3.5 py-2 bg-theme-surface border border-theme-border rounded-xl text-xs text-theme-foreground placeholder-theme-muted focus:border-theme-accent focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                {/* 4. Quick Exit / Panic Button */}
+                <div className="p-6 bg-theme-surface border border-theme-border rounded-2xl space-y-5">
+                  <div className="flex items-center gap-2">
+                    <Icons.ShieldAlert size={18} className="text-red-400" />
+                    <div>
+                      <h3 className="font-semibold text-sm text-theme-foreground">Panic Button / Quick Exit</h3>
+                      <p className="text-xs text-theme-muted">Press your hotkey anywhere on Lume to instantaneously disguise the page.</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-medium text-theme-muted mb-1">Trigger Key</label>
+                      <input
+                        type="text"
+                        maxLength={1}
+                        value={settings.panicKey}
+                        onChange={(e) => updateSettings({ panicKey: e.target.value })}
+                        className="w-full px-3 py-2 bg-theme-surface-active border border-theme-border rounded-xl text-xs font-mono text-center text-theme-foreground uppercase"
+                      />
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <label className="block text-xs font-medium text-theme-muted mb-1">Destination URL</label>
+                      <input
+                        type="url"
+                        value={settings.panicUrl}
+                        onChange={(e) => updateSettings({ panicUrl: e.target.value })}
+                        className="w-full px-3 py-2 bg-theme-surface-active border border-theme-border rounded-xl text-xs text-theme-foreground"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
+                    <div className="flex items-center gap-2">
+                      <label className="text-xs text-theme-muted">Behavior:</label>
+                      <select
+                        value={settings.panicBehavior}
+                        onChange={(e) => updateSettings({ panicBehavior: e.target.value })}
+                        className="px-2.5 py-1.5 bg-theme-surface-active border border-theme-border rounded-lg text-xs text-theme-foreground"
+                      >
+                        <option value="iframe">Fullscreen Shield (In-Place)</option>
+                        <option value="newtab">Open Destination in New Tab</option>
+                      </select>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={triggerPanic}
+                      className="px-3.5 py-1.5 bg-red-500/10 border border-red-500/30 hover:bg-red-500/20 text-red-400 text-xs font-medium rounded-lg transition"
+                    >
+                      Test Panic Mode Now
+                    </button>
+                  </div>
+                </div>
+
+                {/* 5. Regional Time & Clock Settings */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Icons.Clock size={16} className="text-theme-accent" />
+                    <h3 className="font-semibold text-sm text-theme-foreground">Regional Time Preferences</h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-medium text-theme-muted mb-1">Timezone</label>
+                      <select
+                        value={settings.timezone}
+                        onChange={(e) => updateSettings({ timezone: e.target.value })}
+                        className="w-full px-3 py-2 bg-theme-surface border border-theme-border rounded-xl text-xs text-theme-foreground"
+                      >
+                        {TIMEZONES.map(tz => (
+                          <option key={tz.value} value={tz.value}>{tz.label}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-theme-muted mb-1">Clock Display Format</label>
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          type="button"
+                          onClick={() => updateSettings({ clockFormat: "12h" })}
+                          className={`py-2 rounded-xl text-xs font-medium border transition ${
+                            settings.clockFormat === "12h"
+                              ? "border-theme-accent bg-theme-accent-muted text-theme-foreground"
+                              : "border-theme-border bg-theme-surface text-theme-muted"
+                          }`}
+                        >
+                          12-Hour (AM/PM)
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => updateSettings({ clockFormat: "24h" })}
+                          className={`py-2 rounded-xl text-xs font-medium border transition ${
+                            settings.clockFormat === "24h"
+                              ? "border-theme-accent bg-theme-accent-muted text-theme-foreground"
+                              : "border-theme-border bg-theme-surface text-theme-muted"
+                          }`}
+                        >
+                          24-Hour
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 6. Keyboard Shortcuts Guide */}
+                <div className="p-5 bg-theme-surface border border-theme-border rounded-2xl space-y-3">
+                  <h4 className="text-sm font-semibold text-theme-foreground">Navigation Hotkeys</h4>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs font-mono text-theme-muted">
+                    <div><span className="text-theme-foreground font-bold">[1]</span> Home</div>
+                    <div><span className="text-theme-foreground font-bold">[2]</span> Games Hub</div>
+                    <div><span className="text-theme-foreground font-bold">[3]</span> Apps</div>
+                    <div><span className="text-theme-foreground font-bold">[4]</span> Profile</div>
+                    <div><span className="text-theme-foreground font-bold">[5]</span> Settings</div>
+                    <div><span className="text-theme-foreground font-bold">[{settings.panicKey}]</span> Quick Exit</div>
+                  </div>
+                </div>
+
+                {/* Reset Onboarding Option */}
+                <div className="pt-4 border-t border-theme-border flex justify-between items-center">
+                  <span className="text-xs text-theme-muted">Want to re-run the onboarding walkthrough?</span>
+                  <button
+                    onClick={() => updateSettings({ setupCompleted: false })}
+                    className="px-3 py-1.5 rounded-lg border border-theme-border text-xs text-theme-muted hover:text-theme-foreground hover:bg-theme-surface-hover transition"
+                  >
+                    Relaunch Setup Experience
+                  </button>
+                </div>
+              </div>
+            )}
+          </main>
+
+          {/* Footer Minimal Attribution */}
+          <footer className="w-full border-t border-theme-border/50 py-6 text-center text-xs font-mono text-theme-muted">
+            <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-2">
+              <span>Lume • Modern Web Games Hub</span>
+              <span className="text-[11px] opacity-75">All preferences saved locally</span>
+            </div>
+          </footer>
+        </div>
+      );
+    };
+
+    // Render App
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>
